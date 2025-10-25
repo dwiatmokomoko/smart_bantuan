@@ -98,7 +98,7 @@ class SubmissionController extends Controller
                 if ($hp !== '') {
                     $waUrl = 'https://wa.me/' . $hp . '?text=' . urlencode($pesan);
                     $waBtn = '<a href="' . $waUrl . '" target="_blank" class="btn btn-sm btn-outline-success me-1">'
-                        . '<i class="fa fa-whatsapp"></i> WA</a>';
+                        . '<i class="ti ti-brand-whatsapp"></i> WA</a>';
                 }
 
                 // form POST: approved & rejected
