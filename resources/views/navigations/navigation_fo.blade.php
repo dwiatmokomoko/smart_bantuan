@@ -32,7 +32,7 @@
                 @endif
             @else
                 <li>
-                    <a href="{{ route('user.login') }}">Register</a>
+                    <a href="{{ route('pre-eligibility.form') }}">Register</a>
                 </li>
             @endauth
 
