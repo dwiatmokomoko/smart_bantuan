@@ -164,7 +164,7 @@
     if(!confirm('Ubah status berkas menjadi "'+status+'"?')) return;
 
     $.ajax({
-      url: "{{ route('admin.submissions.updateStatus', ':id') }}".replace(':id', id),
+      url: "{{ route('admin.submissions.status', ':id') }}".replace(':id', id),
       method: 'POST',
       data: { _token: '{{ csrf_token() }}', status },
       success: function(res){

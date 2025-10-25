@@ -22,6 +22,8 @@ class SubmissionController extends Controller
         return view('feature.bo.submissions.index', compact("data"));
     }
 
+    // app/Http/Controllers/feature/bo/submission/SubmissionController.php
+
     public function data(Request $request)
     {
         abort_unless($request->ajax(), 404);
@@ -50,9 +52,7 @@ class SubmissionController extends Controller
                     return '-';
                 return ((int) $row->kelayakan === 1 ? 'LAYAK' : 'TIDAK LAYAK');
             })
-            ->editColumn('prob_layak', function ($row) {
-                return is_null($row->prob_layak) ? '-' : number_format((float)$row->prob_layak, 6, '.', '');
-            })
+            ->editColumn('prob_layak', fn($row) => is_null($row->prob_layak) ? '-' : number_format((float) $row->prob_layak, 6, '.', ''))
             ->editColumn('berkas_status', function ($row) {
                 $map = [
                     'pending' => '<span class="badge bg-warning">Menunggu Verifikasi</span>',
@@ -63,12 +63,67 @@ class SubmissionController extends Controller
             })
             ->editColumn('created_at', fn($r) => $r->created_at ?: '-')
             ->addColumn('action', function ($row) {
-                $url = route('admin.submissions.show', $row->ub_id);
-                return '<a href="' . $url . '" class="btn btn-sm btn-outline-primary"><i class="ti ti-eye"></i> Detail</a>';
+                $detailUrl = route('admin.submissions.show', $row->ub_id);
+
+                // format nomor HP -> 62
+                $hp = preg_replace('/\D+/', '', (string) ($row->no_hp ?? ''));
+                if ($hp !== '') {
+                    if (str_starts_with($hp, '0'))
+                        $hp = '62' . substr($hp, 1);
+                    $hp = ltrim($hp, '+');
+                }
+
+                // template pesan WA berdasarkan status
+                $ticket = $row->ticket ?? '-';
+                $pesanPending = "Halo {$row->user_name}, terima kasih telah mengajukan permohonan RUSUNAWA dengan tiket {$ticket}. "
+                    . "Berkas Anda sudah kami terima dan saat ini sedang dalam proses verifikasi. "
+                    . "Kami akan menghubungi Anda kembali setelah proses selesai. Terima kasih 🙏";
+
+                $pesanApproved = "Halo {$row->user_name}, selamat! 🎉 Permohonan RUSUNAWA Anda (tiket {$ticket}) telah DISETUJUI. "
+                    . "Silakan menunggu informasi lanjutan terkait tahapan berikutnya. "
+                    . "Terima kasih atas kepercayaannya.";
+
+                $pesanRejected = "Halo {$row->user_name}, terima kasih atas pengajuan RUSUNAWA (tiket {$ticket}). "
+                    . "Kami mohon maaf, saat ini pengajuan Anda BELUM DAPAT DISETUJUI. "
+                    . "Anda dapat memperbarui data/berkas dan mengajukan kembali di lain kesempatan. "
+                    . "Terima kasih atas pengertiannya.";
+
+                $pesan = $pesanPending;
+                if ($row->berkas_status === 'approved')
+                    $pesan = $pesanApproved;
+                if ($row->berkas_status === 'rejected')
+                    $pesan = $pesanRejected;
+
+                $waBtn = '';
+                if ($hp !== '') {
+                    $waUrl = 'https://wa.me/' . $hp . '?text=' . urlencode($pesan);
+                    $waBtn = '<a href="' . $waUrl . '" target="_blank" class="btn btn-sm btn-outline-success me-1">'
+                        . '<i class="fa fa-whatsapp"></i> WA</a>';
+                }
+
+                // form POST: approved & rejected
+                $approveForm = '<form method="POST" action="' . route('admin.submissions.status', $row->ub_id) . '" class="d-inline">'
+                    . csrf_field()
+                    . '<input type="hidden" name="status" value="approved">'
+                    . '<button type="submit" class="btn btn-sm btn-success me-1"><i class="ti ti-check"></i></button>'
+                    . '</form>';
+
+                $rejectForm = '<form method="POST" action="' . route('admin.submissions.status', $row->ub_id) . '" class="d-inline">'
+                    . csrf_field()
+                    . '<input type="hidden" name="status" value="rejected">'
+                    . '<button type="submit" class="btn btn-sm btn-danger me-1"><i class="ti ti-x"></i></button>'
+                    . '</form>';
+
+                $detailBtn = '<a href="' . $detailUrl . '" class="btn btn-sm btn-outline-primary">'
+                    . '<i class="ti ti-eye"></i></a>';
+
+                return $approveForm . $rejectForm . $waBtn . $detailBtn;
             })
             ->rawColumns(['berkas_status', 'action'])
             ->toJson();
     }
+
+    // app/Http/Controllers/feature/bo/submission/SubmissionController.php
 
     public function show($id)
     {
@@ -103,8 +158,9 @@ class SubmissionController extends Controller
 
         abort_unless($rec, 404);
 
+        // ✅ perbaiki label
         $statusBadge = match ($rec->berkas_status) {
-            'approved' => '<span class="badge bg-success">Menunggu Verifikasi</span>',
+            'approved' => '<span class="badge bg-success">Disetujui</span>',
             'rejected' => '<span class="badge bg-danger">Ditolak</span>',
             default => '<span class="badge bg-warning">Menunggu Verifikasi</span>',
         };
@@ -117,7 +173,6 @@ class SubmissionController extends Controller
             ['label' => 'SKCK', 'path' => $rec->skck_path],
         ];
 
-        // 🔧 penting: topbar butuh $data['menu']
         $data["menu"] = $this->menu;
 
         return view('feature.bo.submissions.show', [
@@ -128,22 +183,50 @@ class SubmissionController extends Controller
         ]);
     }
 
-    public function updateStatus(Request $request, $id)
+
+    // public function updateStatus(Request $request, $id)
+    // {
+    //     $request->validate([
+    //         'status' => 'required|in:pending,approved,rejected',
+    //     ]);
+
+    //     $updated = DB::table('user_berkas')
+    //         ->where('id', $id)
+    //         ->update([
+    //             'status' => $request->status,
+    //             'updated_at' => now(),
+    //         ]);
+
+    //     abort_unless($updated, 404, 'Pengajuan tidak ditemukan.');
+
+    //     return response()->json(['message' => 'Status berkas diperbarui ke: ' . $request->status]);
+    // }
+
+    // app/Http/Controllers/feature/bo/submission/SubmissionController.php
+
+    public function updateStatus(Request $request, int $id)
     {
-        $request->validate([
-            'status' => 'required|in:pending,approved,rejected',
+        $data = $request->validate([
+            'status' => ['required', 'in:pending,approved,rejected'],
+            'notes' => ['nullable', 'string', 'max:2000'],
         ]);
 
-        $updated = DB::table('user_berkas')
+        // update status user_berkas
+        DB::table('user_berkas')
             ->where('id', $id)
             ->update([
-                'status' => $request->status,
+                'status' => $data['status'],
+                'notes' => $data['notes'] ?? null,
                 'updated_at' => now(),
             ]);
 
-        abort_unless($updated, 404, 'Pengajuan tidak ditemukan.');
+        // kalau dipanggil dari DataTables, kita bisa balas JSON
+        if ($request->wantsJson()) {
+            return response()->json(['ok' => true]);
+        }
 
-        return response()->json(['message' => 'Status berkas diperbarui ke: ' . $request->status]);
+        return back()->with('success', 'Status berkas diperbarui.');
     }
+
 
 }

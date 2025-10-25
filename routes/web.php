@@ -56,6 +56,8 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('/submissions/{id}', [SubmissionController::class, 'show'])->name('admin.submissions.show');
         Route::post('/submissions/{id}/status', [SubmissionController::class, 'updateStatus'])
             ->name('admin.submissions.updateStatus');
+        Route::post('/submissions/{id}/status', [SubmissionController::class, 'updateStatus'])
+            ->name('admin.submissions.status');
     });
 });
 
