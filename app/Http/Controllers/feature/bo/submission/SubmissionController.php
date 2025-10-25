@@ -63,7 +63,8 @@ class SubmissionController extends Controller
             })
             ->editColumn('created_at', fn($r) => $r->created_at ?: '-')
             ->addColumn('action', function ($row) {
-                $detailUrl = route('admin.submissions.show', $row->ub_id);
+                $detailUrl = route('admin.submissions.show', $row->ub_id, false);
+                $statusUrl = route('admin.submissions.status', $row->ub_id, false);
 
                 // format nomor HP -> 62
                 $hp = preg_replace('/\D+/', '', (string) ($row->no_hp ?? ''));
@@ -102,20 +103,20 @@ class SubmissionController extends Controller
                 }
 
                 // form POST: approved & rejected
-                $approveForm = '<form method="POST" action="' . route('admin.submissions.status', $row->ub_id) . '" class="d-inline">'
+                $approveForm = '<form method="POST" action="' . $statusUrl . '" class="d-inline">'
                     . csrf_field()
                     . '<input type="hidden" name="status" value="approved">'
                     . '<button type="submit" class="btn btn-sm btn-success me-1"><i class="ti ti-check"></i></button>'
                     . '</form>';
 
-                $rejectForm = '<form method="POST" action="' . route('admin.submissions.status', $row->ub_id) . '" class="d-inline">'
+                $rejectForm = '<form method="POST" action="' . $statusUrl . '" class="d-inline">'
                     . csrf_field()
                     . '<input type="hidden" name="status" value="rejected">'
                     . '<button type="submit" class="btn btn-sm btn-danger me-1"><i class="ti ti-x"></i></button>'
                     . '</form>';
 
-                $detailBtn = '<a href="' . $detailUrl . '" class="btn btn-sm btn-outline-primary">'
-                    . '<i class="ti ti-eye"></i></a>';
+                $detailBtn = '<a href="' . $detailUrl . '" class="btn btn-sm btn-outline-primary"><i class="ti ti-eye"></i></a>';
+
 
                 return $approveForm . $rejectForm . $waBtn . $detailBtn;
             })
