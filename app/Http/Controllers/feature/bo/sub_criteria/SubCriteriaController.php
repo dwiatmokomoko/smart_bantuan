@@ -35,14 +35,14 @@ class SubCriteriaController extends Controller
                 'sub_criterias.id',
                 'sub_criterias.criteria_id',
                 'sub_criterias.name',
-                'sub_criterias.weight',
+                'sub_criterias.weight',            // sudah persentase asli dari DB
                 'criterias.name as criteria_name',
             ]);
 
-        return DataTables::of($qb) // <-- ganti dari queryBuilder() ke of()
-            ->addIndexColumn()                         // DT_RowIndex (virtual)
-            ->orderColumn('DT_RowIndex', 'sub_criterias.id $1') // kalau user klik kolom No
-            ->editColumn('weight', fn($row) => (int) $row->weight) // kirim angka murni
+        return DataTables::of($qb)
+            ->addIndexColumn()
+            ->orderColumn('DT_RowIndex', 'sub_criterias.id $1')
+            ->editColumn('weight', fn($row) => (int) $row->weight) // tetap angka murni; % ditambahkan di Blade
             ->addColumn('action', function ($row) {
                 $idEnc = encrypt($row->id);
                 $name = e($row->name);
@@ -56,157 +56,103 @@ class SubCriteriaController extends Controller
             ->toJson();
     }
 
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $data["menu"] = $this->menu;
         return view('feature.bo.sub_criteria.index', compact("data"));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $data["menu"] = $this->menu;
-        $data["form_status"] = "Tambah";
+        $data["form_status"] = "Tambah ";
         $data["criteria"] = $this->criteria_repository->getAll();
         return view('feature.bo.sub_criteria.form', compact("data"));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store & Update dalam satu endpoint (repository->store biasanya sudah handle create/update by id).
+     * DI SINI: kita pakai *persentase asli* sebagai weight (mis. 25, 33, 50, 67, 75, 100).
      */
     public function store(Request $request)
     {
         $data = $request->validate([
-            "id" => ['sometimes', 'nullable', 'string'],
-            "criteria_id" => ['required', 'string'],
-            "name" => ['required', 'string', 'max:255'],
-            "weight" => ['required', 'integer', 'between:0,5'] // hanya bisa 0–5
+            "id"          => ['sometimes', 'nullable', 'string'],
+            "criteria_id" => ['required', 'string'],          // terenkripsi
+            "name"        => ['required', 'string', 'max:255'],
+            "weight"      => ['required', 'integer', 'min:0', 'max:100'], // PERSENTASE ASLI
         ], [], [
             "criteria_id" => "Kriteria",
-            "name" => "Nama sub kriteria",
-            "weight" => "Bobot sub kriteria"
+            "name"        => "Nama sub kriteria",
+            "weight"      => "Bobot (persen)",
         ]);
 
-        isset($data["id"])
-            ? $data["updated_by"] = Auth::user()->id
-            : $data["created_by"] = Auth::user()->id;
+        // set created_by / updated_by
+        if (!empty($data['id'])) {
+            $data["updated_by"] = Auth::user()->id;
+        } else {
+            $data["created_by"] = Auth::user()->id;
+        }
 
         try {
-            $data["id"] = is_null($data["id"]) ? $data["id"] : decrypt($data['id']);
+            // decrypt id & criteria_id
+            $data["id"]          = is_null($data["id"]) ? $data["id"] : decrypt($data['id']);
             $data["criteria_id"] = decrypt($data['criteria_id']);
 
-            // Konversi nilai bobot dari angka 0–5 menjadi persen berdasarkan kriteria
-            $criteria_id = (string) $data["criteria_id"];
-            $inputWeight = (int) $data["weight"]; // input dari user 0–5
+            // Validasi tambahan: batasi nilai bobot yang diperbolehkan per kriteria (opsional tapi disarankan)
+            $cid = (string) $data["criteria_id"];
+            $allowed = match ($cid) {
+                '1', '3' => [10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100],               // contoh: Penghasilan & Perkawinan
+                '2', '4' => [10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100],       // contoh: Pekerjaan & Calon Penghuni
+                '5'      => [10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100],           // contoh: Status Penempatan
+                default  => range(0, 100),           // fallback bebas 0..100
+            };
 
-            switch ($criteria_id) {
-                // case '1':
-                // case '2':
-                //     $data["weight"] = $inputWeight == 1 ? 100 : 0;
-                //     break;
-                case '1':
-                    $data["weight"] = match ($inputWeight) {
-                        1 => 33,
-                        3 => 100,
-                        default => 0,
-                    };
-                    break;
-                case '2':
-                    $data["weight"] = match ($inputWeight) {
-                        1 => 25,
-                        2 => 50,
-                        3 => 75,
-                        4 => 100,
-                        default => 0,
-                    };
-                    break;
-                case '3':
-                    $data["weight"] = match ($inputWeight) {
-                        1 => 33,
-                        3 => 100,
-                        default => 0,
-                    };
-                    break;
-                case '4':
-                    $data["weight"] = match ($inputWeight) {
-                        1 => 25,
-                        2 => 50,
-                        3 => 75,
-                        4 => 100,
-                        default => 0,
-                    };
-                    break;
-                case '5':
-                    $data["weight"] = match ($inputWeight) {
-                        1 => 33,
-                        2 => 67,
-                        3 => 100,
-                        default => 0,
-                    };
-                    break;
-                default:
-                    $data["weight"] = 0;
-                    break;
+            if (!in_array((int)$data['weight'], $allowed, true)) {
+                return back()
+                    ->withErrors(['weight' => 'Nilai bobot tidak sesuai dengan ketentuan kriteria terpilih.'])
+                    ->withInput();
             }
 
+            // Simpan langsung nilai weight (persentase) apa adanya
             $this->repository->store($data);
 
-            return redirect()->route('sub-criteria.index')->with('success', 'Berhasil menambah sub kriteria ' . $data["name"]);
+            $msg = (!empty($data['id']) ? 'Berhasil mengubah' : 'Berhasil menambah') . ' sub kriteria ' . $data["name"];
+            return redirect()->route('sub-criteria.index')->with('success', $msg);
+
         } catch (Exception $e) {
             if (env('APP_DEBUG')) {
                 return $e->getMessage();
             }
-            return back()->with('error', "Oops..!! Terjadi keesalahan saat menyimpan sub kriteria")->withInput($request->input());
+            return back()->with('error', "Oops..!! Terjadi kesalahan saat menyimpan sub kriteria")->withInput($request->input());
         }
     }
 
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-        $data["menu"] = $this->menu;
-        $data["form_status"] = "Ubah";
-        $data["criteria"] = $this->criteria_repository->getAll();
-        $data["record"] = $this->repository->getById(decrypt($id));
+        $data["menu"]        = $this->menu;
+        $data["form_status"] = "Ubah ";
+        $data["criteria"]    = $this->criteria_repository->getAll();
+        $data["record"]      = $this->repository->getById(decrypt($id));
         return view('feature.bo.sub_criteria.form', compact("data"));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
-        //
+        // Tidak digunakan karena store() sudah handle create/update via repository->store
+        abort(404);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         try {
             $this->repository->destroy(decrypt($id));
-            return redirect()->route('sub-criteria.index')->with('success', 'Kriteria berhasil dihapus');
+            return redirect()->route('sub-criteria.index')->with('success', 'Sub kriteria berhasil dihapus');
         } catch (Exception $e) {
             if (env('APP_DEBUG')) {
                 return $e->getMessage();
             }
-            return back()->with('error', "Oops..!! Terjadi keesalahan saat menghapus kriteria");
+            return back()->with('error', "Oops..!! Terjadi kesalahan saat menghapus sub kriteria");
         }
     }
 }
