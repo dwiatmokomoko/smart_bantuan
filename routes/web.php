@@ -15,6 +15,8 @@ use App\Http\Controllers\feature\fo\count\PreEligibilityController;
 use App\Http\Controllers\feature\fo\ourteam\Ourteam_foController;
 use App\Http\Controllers\feature\fo\diagnosis\DiagnosisController;
 use App\Http\Controllers\feature\fo\auth\UserAuthController;
+use App\Http\Controllers\feature\fo\berkas\BerkasController;
+use App\Http\Controllers\feature\fo\pengajuan\PengajuanController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -59,8 +61,7 @@ Route::get('/contact', [Contact_foController::class, 'index'])->name('fo.contact
 
 // Route::post('/pra-kelayakan/check', [PreEligibilityController::class, 'check'])->name('pre-eligibility.check');
 Route::middleware('auth:web')->group(function () {
-    Route::get('/pra-kelayakan', fn () => view('feature.fo.count.pre_eligibility'))->name('pre-eligibility.form');
-    Route::post('/pra-kelayakan/check', [PreEligibilityController::class, 'check'])->name('pre-eligibility.check');
+
 });
 
 Route::get('/count', [CountController::class, 'index'])->name('fo.count.index');
@@ -71,32 +72,40 @@ Route::post('/diagnosis/register', [DiagnosisController::class, 'register'])->na
 Route::get('/diagnosis', [DiagnosisController::class, 'showDiagnosisForm'])->name('feature.fo.diagnosis.index');
 Route::post('/diagnosis/submit', [DiagnosisController::class, 'submit'])->name('feature.fo.diagnosis.submit');
 
+// Pra-kelayakan (public)
+Route::get('/pra-kelayakan', fn() => view('feature.fo.count.pre_eligibility'))->name('pre-eligibility.form');
+Route::post('/pra-kelayakan/check', [PreEligibilityController::class, 'check'])->name('pre-eligibility.check');
 
+// Hanya boleh akses COUNT jika sudah login
+Route::middleware('auth:web')->group(function () {
+    Route::get('/count', [CountController::class, 'index'])->name('fo.count.index');
+    Route::post('/count', [CountController::class, 'predict'])->name('fo.count.predict');
+
+    Route::get('/berkas/upload', [BerkasController::class, 'create'])
+        ->name('fo.berkas.create');
+    Route::post('/berkas/upload', [BerkasController::class, 'store'])
+        ->name('fo.berkas.store');
+    Route::get('/pengajuan/riwayat', [PengajuanController::class, 'history'])
+        ->name('fo.pengajuan.history');
+});
+
+// Group User (auth web)
 Route::prefix('user')->name('user.')->group(function () {
-    // Hanya untuk yang BELUM login sebagai user
+    // Guest user
     Route::middleware('guest:web')->group(function () {
         Route::get('login', [UserAuthController::class, 'showLoginForm'])->name('login');
         Route::post('login', [UserAuthController::class, 'login'])->name('login.post');
 
-        Route::get('register', [UserAuthController::class, 'showRegisterForm'])->name('register');
-        Route::post('register', [UserAuthController::class, 'register'])->name('register.post');
+        // REGISTER hanya jika lolos pra-kelayakan
+        Route::middleware('pre.eligible')->group(function () {
+            Route::get('register', [UserAuthController::class, 'showRegisterForm'])->name('register');
+            Route::post('register', [UserAuthController::class, 'register'])->name('register.post');
+        });
     });
 
-    // Hanya untuk yang SUDAH login sebagai user
+    // Sudah login
     Route::middleware('auth:web')->group(function () {
         Route::post('logout', [UserAuthController::class, 'logout'])->name('logout');
-
-        // Route::get('/pra-kelayakan', function () {
-        //     return view('feature.fo.count.pre_eligibility');
-        // })->name('pre-eligibility.form');
-
-        // Route::post('/pra-kelayakan/check', [PreEligibilityController::class, 'check'])->name('pre-eligibility.check');
-
-        // (opsional) Pindahkan halaman yang butuh login ke sini
-        // Route::get('count', [CountController::class, 'index'])->name('count.index');
-        // Route::post('count', [CountController::class, 'predict'])->name('count.predict');
     });
-
-
-
 });
+

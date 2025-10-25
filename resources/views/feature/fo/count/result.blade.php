@@ -65,15 +65,23 @@
                                             </tr>
                                             <tr>
                                                 <td class="hosting__feature--item font-weight-bold">Hasil Rekomendasi</td>
-                                                <td class="w-50 text-left pl-4 font-weight-bold {{ Str::lower($keputusan) == 'layak' ? 'text-success' : 'text-danger' }}">
+                                                <td
+                                                    class="w-50 text-left pl-4 font-weight-bold {{ Str::lower($keputusan) == 'layak' ? 'text-success' : 'text-danger' }}">
                                                     {{ Str::upper($keputusan) }}
                                                 </td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="mt-4">
+                                <div class="mt-4 d-flex gap-2">
                                     <a href="{{ route('fo.count.index') }}" class="btn btn-secondary">Kembali</a>
+
+                                    @if (Str::lower($keputusan) === 'layak')
+                                        <a href="{{ route('fo.berkas.create', isset($ticket) ? ['ticket' => $ticket] : []) }}"
+                                            class="btn btn-primary">
+                                            Upload Berkas
+                                        </a>
+                                    @endif
                                 </div>
                             </div>
                         </div>

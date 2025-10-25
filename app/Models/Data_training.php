@@ -16,8 +16,6 @@ class Data_training extends Model
         'perkawinan',
         'calon_penghuni',
         'status_penempatan',
-        'status_kependudukan',
-        'status_kepemilikan_rumah',
         'kelayakan',
         'status',
         'created_by',

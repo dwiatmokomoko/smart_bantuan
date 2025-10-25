@@ -8,7 +8,7 @@
                 <div class="col-lg-12">
                     <div class="breadcrumb__option">
                         <a href="./index.html"><span class="fa fa-home"></span> Home</a>
-                        <span>Hitung Kelayakan</span>
+                        <span>Lengkapi Data Pendaftaran</span>
                     </div>
                 </div>
             </div>
@@ -21,7 +21,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <h3>Hitung Kelayakan</h3>
+                    <h3>Lengkapi Data Pendaftaran</h3>
                     <form action="{{ route('fo.count.predict') }}" method="POST">
                         @csrf <!-- Laravel CSRF Protection -->
                         <div class="row">
@@ -57,7 +57,7 @@
                                     <div class="mb-3">
                                         <label class="form-label">Pekerjaan </label>
                                         <select name="pekerjaan" class="form-control" id="pekerjaan">
-                                            @foreach ($subCriterias->where('criteria_id', 4)->sortBy('weight') as $item)
+                                            @foreach ($subCriterias->where('criteria_id', 2)->sortBy('weight') as $item)
                                                 <option value="{{ $item->weight }}">{{ $item->name }}</option>
                                             @endforeach
                                         </select>
@@ -71,7 +71,7 @@
                                     <div class="mb-3">
                                         <label class="form-label">Penghasilan</label>
                                         <select name="penghasilan" class="form-control" id="penghasilan">
-                                            @foreach ($subCriterias->where('criteria_id', 2)->sortBy('weight') as $item)
+                                            @foreach ($subCriterias->where('criteria_id', 1)->sortBy('weight') as $item)
                                                 <option value="{{ $item->weight }}">{{ $item->name }}</option>
                                             @endforeach
                                         </select>
@@ -80,7 +80,7 @@
                                     <div class="mb-3">
                                         <label class="form-label">Perkawinan</label>
                                         <select name="perkawinan" class="form-control" id="perkawinan">
-                                            @foreach ($subCriterias->where('criteria_id', 5)->sortBy('weight') as $item)
+                                            @foreach ($subCriterias->where('criteria_id', 3)->sortBy('weight') as $item)
                                                 <option value="{{ $item->weight }}">{{ $item->name }}</option>
                                             @endforeach
                                         </select>
@@ -88,7 +88,7 @@
                                     <div class="mb-3">
                                         <label class="form-label">Calon Penghuni</label>
                                         <select name="calon_penghuni" class="form-control" id="calon_penghuni">
-                                            @foreach ($subCriterias->where('criteria_id', 3)->sortBy('weight') as $item)
+                                            @foreach ($subCriterias->where('criteria_id', 4)->sortBy('weight') as $item)
                                                 <option value="{{ $item->weight }}">{{ $item->name }}</option>
                                             @endforeach
                                         </select>
@@ -96,7 +96,7 @@
                                     <div class="mb-3">
                                         <label class="form-label">Status Penempatan</label>
                                         <select name="status_penempatan" class="form-control" id="status_penempatan">
-                                            @foreach ($subCriterias->where('criteria_id', 1)->sortBy('weight') as $item)
+                                            @foreach ($subCriterias->where('criteria_id', 5)->sortBy('weight') as $item)
                                                 <option value="{{ $item->weight }}">{{ $item->name }}</option>
                                             @endforeach
                                         </select>
@@ -105,7 +105,7 @@
                             </div>
 
                         </div>
-                        <button type="submit" class="float-end btn btn-primary mt-3 mb-0" color="#28c490">Hitung</button>
+                        <button type="submit" class="float-end btn btn-primary mt-3 mb-0" color="#28c490">Lanjut</button>
                     </form>
                 </div>
             </div>

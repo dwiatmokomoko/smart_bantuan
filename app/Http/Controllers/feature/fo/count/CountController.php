@@ -6,16 +6,16 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Repositories\CriteriaRepository;
 use App\Repositories\SubCriteriaRepository;
-use App\Services\NaiveBayesService;
+use App\Services\SmartRocService;
 use Illuminate\Support\Facades\Log;
 
 class CountController extends Controller
 {
     private $menu;
     private SubCriteriaRepository $subCriteriaRepository;
-    private NaiveBayesService $service;
+    private SmartRocService $service;
 
-    public function __construct(SubCriteriaRepository $subCriteriaRepository, NaiveBayesService $service)
+    public function __construct(SubCriteriaRepository $subCriteriaRepository, SmartRocService $service)
     {
         $this->menu = "Counter";
         $this->subCriteriaRepository = $subCriteriaRepository;
@@ -27,12 +27,14 @@ class CountController extends Controller
             'is_warga_yogya' => 'required|in:ya,tidak',
             'is_pns_tni_polri' => 'required|in:ya,tidak',
             'memiliki_rumah' => 'required|in:ya,tidak',
+            'is_menikah' => 'required|in:ya,tidak',
         ]);
 
         if (
             $request->is_warga_yogya === 'tidak' &&
             $request->is_pns_tni_polri === 'ya' &&
-            $request->memiliki_rumah === 'ya'
+            $request->memiliki_rumah === 'ya' &&
+            $request->is_menikah === 'tidak'
         ) {
             return redirect()->back()->withInput()->with('error_filter', 'Mohon maaf, Anda tidak termasuk dalam kriteria penerima program RUSUNAWA');
         }
@@ -83,11 +85,11 @@ class CountController extends Controller
         };
 
         $inputLabel = [
-            'penghasilan' => $getNameByWeightAndCriteria($inputData['penghasilan'], 2),
-            'pekerjaan' => $getNameByWeightAndCriteria($inputData['pekerjaan'], 4),
-            'perkawinan' => $getNameByWeightAndCriteria($inputData['perkawinan'], 5),
-            'calon_penghuni' => $getNameByWeightAndCriteria($inputData['calon_penghuni'], 3),
-            'status_penempatan' => $getNameByWeightAndCriteria($inputData['status_penempatan'], 1),
+            'penghasilan' => $getNameByWeightAndCriteria($inputData['penghasilan'], 1),
+            'pekerjaan' => $getNameByWeightAndCriteria($inputData['pekerjaan'], 2),
+            'perkawinan' => $getNameByWeightAndCriteria($inputData['perkawinan'], 3),
+            'calon_penghuni' => $getNameByWeightAndCriteria($inputData['calon_penghuni'], 4),
+            'status_penempatan' => $getNameByWeightAndCriteria($inputData['status_penempatan'], 5),
         ];
 
         $result = $this->service->train($inputData);

@@ -6,7 +6,7 @@ use App\Models\Data_training;
 use App\Repositories\SubCriteriaRepository;
 use Illuminate\Http\Request;
 
-class NaiveBayesService
+class SmartRocService
 {
 
     private Data_training $model;

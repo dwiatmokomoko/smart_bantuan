@@ -23,15 +23,20 @@ class User extends Authenticatable
         'role',
     ];
 
-    protected $hidden = ['password','remember_token'];
+    protected $hidden = ['password', 'remember_token'];
 
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
-            'tanggal_lahir'     => 'date',
-            'password'          => 'hashed',
+            'tanggal_lahir' => 'date',
+            'password' => 'hashed',
         ];
+    }
+
+    public function berkas()
+    {
+        return $this->hasMany(\App\Models\UserBerkas::class);
     }
 }
 

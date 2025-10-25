@@ -5,6 +5,7 @@ use App\Http\Middleware\Authenticate;
 use Illuminate\Auth\Middleware\RedirectIfAuthenticated;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
+use App\Http\Middleware\EnsurePreEligible;
 use Illuminate\Foundation\Configuration\Middleware;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -16,6 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             'admin' => Authenticate::class,
+            'pre.eligible' => EnsurePreEligible::class,
         ])
         ->redirectGuestsTo(fn () => route("admin.login"))
         ->redirectUsersTo(fn () => route("admin.home"));
@@ -24,4 +26,3 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })->create();
 
-    

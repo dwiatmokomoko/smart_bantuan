@@ -16,6 +16,8 @@ class UserAuthController extends Controller
         return view('feature.fo.auth.index');
     }
 
+
+
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -23,21 +25,22 @@ class UserAuthController extends Controller
             'password' => ['required'],
         ]);
 
-        // buang intended yang “nyangkut” ke admin
         $request->session()->forget('url.intended');
 
         if (Auth::guard('web')->attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
-            // Arahkan ke halaman user yang pasti, JANGAN ke route guest
-            return redirect()->route('fo.home.index'); // atau route('user.dashboard') jika ada
+            // Setelah login, arahkan ke Count (sesuai requirement)
+            return redirect()->route('fo.home.index');
         }
 
         return back()->withErrors(['email' => 'Email atau password salah'])->onlyInput('email');
     }
 
+
     public function showRegisterForm()
     {
-        return view('feature.fo.auth.register');
+        $payload = session('pre_eligibility_payload'); // optional
+        return view('feature.fo.auth.register', compact('payload'));
     }
 
     // App\Http\Controllers\feature\fo\auth\UserAuthController.php
@@ -53,11 +56,10 @@ class UserAuthController extends Controller
             'tanggal_lahir' => ['required', 'date'],
             'alamat' => ['required', 'string', 'max:1000'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
-            'no_hp' => ['required', 'string', 'max:32', 'regex:/^[0-9+][0-9\s\\-()]*$/'],
-            'password' => ['required', \Illuminate\Validation\Rules\Password::min(8)->letters()->numbers(), 'confirmed'],
+            'no_hp' => ['required', 'string', 'max:32', 'regex:/^[0-9+][0-9\s\-()]*$/'],
+            'password' => ['required', Password::min(8)->letters()->numbers(), 'confirmed'],
         ]);
 
-        // jika ada sesi admin aktif, logout dulu
         if (Auth::guard('admin')->check()) {
             Auth::guard('admin')->logout();
         }
@@ -73,15 +75,17 @@ class UserAuthController extends Controller
             'alamat' => $data['alamat'],
             'email' => $data['email'],
             'no_hp' => $data['no_hp'],
-            'password' => $data['password'], // auto-hash via casts
+            'password' => $data['password'], // di-hash via casts
             'role' => 'user',
         ]);
 
-        Auth::guard('web')->login($user);
-        $request->session()->regenerate();
+        // bersihkan flag pra-kelayakan (biar tidak dipakai lagi)
+        $request->session()->forget(['pre_eligible', 'pre_eligibility_payload']);
 
-        // JANGAN ke route('user.login') (itu guest). Arahkan ke halaman user.
-        return redirect()->route('fo.home.index'); // atau route('user.dashboard') kalau ada
+        // JANGAN auto-login, arahkan ke login
+        return redirect()
+            ->route('user.login')
+            ->with('success', 'Registrasi berhasil. Silakan login untuk melanjutkan pengajuan.');
     }
 
 

@@ -24,14 +24,26 @@
                         </li>
 
                         @auth('web')
-                            <li class="{{ request()->is('pra-kelayakan*') ? 'active' : '' }}">
-                                <a href="{{ route('pre-eligibility.form') }}">Pendaftaran</a>
-                            </li>
+                            @php
+                                // dianggap “sudah mengajukan” jika ada minimal satu paket berkas
+                                $hasPengajuan = \App\Models\UserBerkas::where('user_id', auth('web')->id())->exists();
+                            @endphp
+
+                            @if ($hasPengajuan)
+                                <li class="{{ request()->is('pengajuan/riwayat') ? 'active' : '' }}">
+                                    <a href="{{ route('fo.pengajuan.history') }}">Riwayat</a>
+                                </li>
+                            @else
+                                <li class="{{ request()->is('count') ? 'active' : '' }}">
+                                    <a href="{{ route('fo.count.index') }}">Pengajuan</a>
+                                </li>
+                            @endif
                         @else
                             <li>
-                                <a href="{{ route('user.login') }}">Pendaftaran</a>
+                                <a href="{{ route('user.login') }}">Register</a>
                             </li>
                         @endauth
+
 
                         <li class="{{ request()->is('contact') ? 'active' : '' }}">
                             <a href="{{ route('fo.contact.index') }}">Petunjuk</a>

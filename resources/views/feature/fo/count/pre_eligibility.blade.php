@@ -58,6 +58,14 @@
                                         <option value="tidak">Tidak</option>
                                     </select>
                                 </div>
+                                <div class="mb-3">
+                                    <label>Apakah Anda sudah atau pernah menikah?</label>
+                                    <select name="is_menikah" class="form-control" required>
+                                        <option value="">-- Pilih --</option>
+                                        <option value="ya">Ya</option>
+                                        <option value="tidak">Tidak</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Lanjut</button>
