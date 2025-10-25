@@ -7,6 +7,8 @@ use App\Http\Controllers\feature\bo\data_testing\DataTestingController;
 use App\Http\Controllers\feature\bo\data_training\DataTrainingController;
 use App\Http\Controllers\feature\bo\sub_criteria\SubCriteriaController;
 use App\Http\Controllers\feature\bo\user\UserController;
+use App\Http\Controllers\feature\bo\submission\SubmissionController;
+
 use App\Http\Controllers\feature\fo\home\Home_foController;
 use App\Http\Controllers\feature\fo\about\About_foController;
 use App\Http\Controllers\feature\fo\contact\Contact_foController;
@@ -47,6 +49,13 @@ Route::group(['prefix' => 'admin'], function () {
 
         Route::resource('/user', UserController::class);
         Route::get('users', [UserController::class, 'datas'])->name("users.data");
+
+        Route::get('/submissions', [SubmissionController::class, 'index'])->name('admin.submissions.index');
+        Route::get('/submissions/data', [SubmissionController::class, 'data'])
+            ->name('admin.submissions.data');
+        Route::get('/submissions/{id}', [SubmissionController::class, 'show'])->name('admin.submissions.show');
+        Route::post('/submissions/{id}/status', [SubmissionController::class, 'updateStatus'])
+            ->name('admin.submissions.updateStatus');
     });
 });
 

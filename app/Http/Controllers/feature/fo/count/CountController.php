@@ -49,55 +49,52 @@ class CountController extends Controller
         return view('feature.fo.count.index', compact('subCriterias'));
     }
 
-    public function predict(Request $request)
-    {
-        $validated = $request->validate([
-            'name' => 'required|string',
-            'nik' => 'required|numeric',
-            'jenis_kelamin' => 'required|string',
-            'penghasilan' => 'required|numeric',
-            'pekerjaan' => 'required|numeric',
-            'perkawinan' => 'required|numeric',
-            'calon_penghuni' => 'required|numeric',
-            'status_penempatan' => 'required|numeric'
-        ]);
+public function predict(Request $request)
+{
+    $validated = $request->validate([
+        'name'              => 'required|string',
+        'nik'               => 'required|numeric',
+        'jenis_kelamin'     => 'required|string',
+        'penghasilan'       => 'required|numeric',
+        'pekerjaan'         => 'required|numeric',
+        'perkawinan'        => 'required|numeric',
+        'calon_penghuni'    => 'required|numeric',
+        'status_penempatan' => 'required|numeric'
+    ]);
 
-        $inputData = $request->only([
-            'name',
-            'nik',
-            'jenis_kelamin',
-            'penghasilan',
-            'pekerjaan',
-            'perkawinan',
-            'calon_penghuni',
-            'status_penempatan'
-        ]);
+    $inputData = $request->only([
+        'name','nik','jenis_kelamin','penghasilan','pekerjaan',
+        'perkawinan','calon_penghuni','status_penempatan'
+    ]);
 
-        // Dapatkan semua sub-kriteria dari database
-        $subCriteriaAll = $this->subCriteriaRepository->getAll();
+    // label sub-kriteria untuk tampilan
+    $subAll = $this->subCriteriaRepository->getAll();
+    $map = function ($w, $cid) use ($subAll) {
+        $row = $subAll->where('weight', $w)->where('criteria_id', $cid)->first();
+        return $row ? $row->name : 'Data Tidak Ditemukan (Weight: '.$w.')';
+    };
+    $inputLabel = [
+        'penghasilan'       => $map($inputData['penghasilan'], 1),
+        'pekerjaan'         => $map($inputData['pekerjaan'], 2),
+        'perkawinan'        => $map($inputData['perkawinan'], 3),
+        'calon_penghuni'    => $map($inputData['calon_penghuni'], 4),
+        'status_penempatan' => $map($inputData['status_penempatan'], 5),
+    ];
 
-        // Fungsi helper untuk mendapatkan nama berdasarkan weight dan criteria_id
-        $getNameByWeightAndCriteria = function ($weight, $criteriaId) use ($subCriteriaAll) {
-            $criteria = $subCriteriaAll->where('weight', $weight)
-                ->where('criteria_id', $criteriaId)
-                ->first();
-            return $criteria ? $criteria->name : 'Data Tidak Ditemukan (Weight: ' . $weight . ')';
-        };
+    // Jalankan service -> menyimpan ke DB, mengembalikan ticket
+    $result = $this->service->train($inputData);
 
-        $inputLabel = [
-            'penghasilan' => $getNameByWeightAndCriteria($inputData['penghasilan'], 1),
-            'pekerjaan' => $getNameByWeightAndCriteria($inputData['pekerjaan'], 2),
-            'perkawinan' => $getNameByWeightAndCriteria($inputData['perkawinan'], 3),
-            'calon_penghuni' => $getNameByWeightAndCriteria($inputData['calon_penghuni'], 4),
-            'status_penempatan' => $getNameByWeightAndCriteria($inputData['status_penempatan'], 5),
-        ];
-
-        $result = $this->service->train($inputData);
-
-        return view('feature.fo.count.result', [
-            'data_input' => $inputData,
-            'input_label' => $inputLabel,
-            'keputusan' => $result['keputusan']
-        ]);
+    // simpan ticket ke session agar bisa dipakai saat upload berkas
+    if (!empty($result['ticket'])) {
+        session(['last_ticket' => $result['ticket']]);
     }
+
+    return view('feature.fo.count.result', [
+        'data_input' => $inputData,
+        'input_label'=> $inputLabel,
+        'keputusan'  => $result['keputusan'],
+        'ticket'     => $result['ticket'] ?? null, // <— penting!
+    ]);
+}
+
 }

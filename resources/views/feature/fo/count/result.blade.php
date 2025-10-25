@@ -77,7 +77,7 @@
                                     <a href="{{ route('fo.count.index') }}" class="btn btn-secondary">Kembali</a>
 
                                     @if (Str::lower($keputusan) === 'layak')
-                                        <a href="{{ route('fo.berkas.create', isset($ticket) ? ['ticket' => $ticket] : []) }}"
+                                        <a href="{{ route('fo.berkas.create',  ['ticket' => $ticket]) }}"
                                             class="btn btn-primary">
                                             Upload Berkas
                                         </a>

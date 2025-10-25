@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+// app/Models/Data_training.php
 class Data_training extends Model
 {
-    use HasFactory;
     protected $fillable = [
         'name',
         'ticket',
@@ -19,13 +19,14 @@ class Data_training extends Model
         'kelayakan',
         'status',
         'created_by',
-        'updated_by'
+        'updated_by',
+        'prob_layak',
+        'prob_tidak_layak',
     ];
 
-    protected static function booted()
-    {
-        static::creating(function ($model) {
-            $model->ticket = uniqid();
-        });
-    }
+    protected $casts = [
+        'prob_layak' => 'float',
+        'prob_tidak_layak' => 'float',
+    ];
 }
+

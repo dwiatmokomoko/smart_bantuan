@@ -1,11 +1,18 @@
-<div class="brand-logo d-flex align-items-center justify-content-between">
-    <a href="./index.html" class="text-nowrap logo-img">
-        <img src="{{ asset('bo/images/logos/silayak-logo2.png') }}" width="180" alt="" class="ms-2" />
+<div class="brand-logo d-flex align-items-center justify-content-center position-relative py-3">
+    <a href="{{ route('admin.home') }}" class="text-nowrap logo-img">
+        <img src="{{ asset('fo/img/silayak-logo2.png') }}"
+             alt="Logo"
+             class="rounded-circle d-block mx-auto mt-2"  {{-- mt-2 = agak turun --}}
+             style="height:80px;width:80px;object-fit:cover;">
     </a>
-    <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
+
+    {{-- tombol close diposisikan absolute agar logo tetap center --}}
+    <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer position-absolute end-0 top-0 me-2 mt-2"
+         id="sidebarCollapse">
         <i class="ti ti-x fs-8"></i>
     </div>
 </div>
+
 <!-- Sidebar navigation-->
 <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
     <ul id="sidebarnav">
@@ -42,7 +49,7 @@
             </a>
         </li>
         <li class="sidebar-item">
-            <a class="sidebar-link" href="{{route('data-training.index')}}" aria-expanded="false">
+            <a class="sidebar-link" href="{{ route('data-training.index') }}" aria-expanded="false">
                 <span>
                     <i class="ti ti-database"></i>
                 </span>
@@ -51,7 +58,7 @@
         </li>
 
         <li class="sidebar-item">
-            <a class="sidebar-link" href="{{route('data-testing.index')}}" aria-expanded="false">
+            <a class="sidebar-link" href="{{ route('data-testing.index') }}" aria-expanded="false">
                 <span>
                     <i class="ti ti-database-import"></i>
                 </span>
@@ -61,10 +68,23 @@
 
         <li class="nav-small-cap">
             <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+            <span class="hide-menu">Pendaftaran Rusunawa</span>
+        </li>
+        <li class="sidebar-item">
+            <a class="sidebar-link " href="{{ route('admin.submissions.index') }}" aria-expanded="false">
+                <span>
+                    <i class="ti ti-list"></i>
+                </span>
+                <span class="hide-menu">Data Pendaftar</span>
+            </a>
+        </li>
+
+        <li class="nav-small-cap">
+            <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
             <span class="hide-menu">PENGGUNA</span>
         </li>
         <li class="sidebar-item">
-            <a class="sidebar-link" href="{{route('user.index')}}" aria-expanded="false">
+            <a class="sidebar-link" href="{{ route('user.index') }}" aria-expanded="false">
                 <span>
                     <i class="ti ti-login"></i>
                 </span>

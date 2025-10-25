@@ -40,49 +40,47 @@
                     @endif
 
                     <form method="POST"
-                          action="{{ route('fo.berkas.store', request('ticket') ? ['ticket' => request('ticket')] : []) }}"
-                          enctype="multipart/form-data">
+                        action="{{ route('fo.berkas.store', request('ticket') ? ['ticket' => request('ticket')] : []) }}"
+                        enctype="multipart/form-data">
                         @csrf
 
                         {{-- jika kamu ingin mengikat ke ticket --}}
-                        @if(isset($ticket))
-                            <input type="hidden" name="ticket" value="{{ $ticket }}">
-                        @elseif(request('ticket'))
-                            <input type="hidden" name="ticket" value="{{ request('ticket') }}">
-                        @endif
+                        <input type="hidden" name="ticket" value="{{ request('ticket') ?? session('last_ticket') }}">
 
                         <div class="mb-3">
                             <label class="form-label">KTP <span class="text-danger">*</span></label>
-                            <input type="file" name="ktp" class="form-control"
-                                   accept="image/*,application/pdf" required>
+                            <input type="file" name="ktp" class="form-control" accept="image/*,application/pdf"
+                                required>
                             <small class="text-muted">Format: JPG/PNG/PDF, maks 5MB.</small>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">KK <span class="text-danger">*</span></label>
-                            <input type="file" name="kk" class="form-control"
-                                   accept="image/*,application/pdf" required>
+                            <input type="file" name="kk" class="form-control" accept="image/*,application/pdf"
+                                required>
                             <small class="text-muted">Format: JPG/PNG/PDF, maks 5MB.</small>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Surat Pernyataan Belum Memiliki Rumah <span class="text-danger">*</span></label>
+                            <label class="form-label">Surat Pernyataan Belum Memiliki Rumah <span
+                                    class="text-danger">*</span></label>
                             <input type="file" name="surat_belum_memiliki_rumah" class="form-control"
-                                   accept="image/*,application/pdf" required>
+                                accept="image/*,application/pdf" required>
                             <small class="text-muted">Format: JPG/PNG/PDF, maks 5MB.</small>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Slip Gaji / Surat Pernyataan Penghasilan <span class="text-danger">*</span></label>
-                            <input type="file" name="slip_gaji" class="form-control"
-                                   accept="image/*,application/pdf" required>
+                            <label class="form-label">Slip Gaji / Surat Pernyataan Penghasilan <span
+                                    class="text-danger">*</span></label>
+                            <input type="file" name="slip_gaji" class="form-control" accept="image/*,application/pdf"
+                                required>
                             <small class="text-muted">Format: JPG/PNG/PDF, maks 5MB.</small>
                         </div>
 
                         <div class="mb-4">
                             <label class="form-label">SKCK <span class="text-danger">*</span></label>
-                            <input type="file" name="skck" class="form-control"
-                                   accept="image/*,application/pdf" required>
+                            <input type="file" name="skck" class="form-control" accept="image/*,application/pdf"
+                                required>
                             <small class="text-muted">Format: JPG/PNG/PDF, maks 5MB.</small>
                         </div>
 

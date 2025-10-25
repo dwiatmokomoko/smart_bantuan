@@ -26,9 +26,6 @@ class SmartRocService
             'perkawinan',
             'calon_penghuni',
             'status_penempatan'
-            // ,
-            // 'status_kependudukan',
-            // 'status_kepemilikan_rumah'
         ];
 
 
@@ -68,13 +65,17 @@ class SmartRocService
         $tidak_layak = $mpctl * $probability_tidak_layak;
         $keputusan = ($layak > $tidak_layak) ? 1 : 0;
         $data_uji['kelayakan'] = $keputusan;
+        $data_uji['prob_layak'] = $layak;
+        $data_uji['prob_tidak_layak'] = $tidak_layak;
         $data_uji['status'] = 1;
         $data_uji['created_by'] = "guest";
+        $data_uji['ticket'] = $this->generateUniqueTicket();
 
         $this->model->create($data_uji);
 
         $result = [
             "data_input" => $data_uji,
+            "ticket" => $data_uji['ticket'],
             "total_data" => $total_data,
             "total_layak" => $total_layak,
             "total_tidak_layak" => $total_tidak_layak,
@@ -83,10 +84,19 @@ class SmartRocService
             "temp" => $temp,
             "total_perkalian_kelayakan" => $mpcl,
             "total_perkalian_ketidak_layakan" => $mpctl,
-            "nilai_layak" => $layak,
-            "nilai_tidak_layak" => $tidak_layak,
+            "prob_layak" => $layak,
+            "prob_tidak_layak" => $tidak_layak,
             "keputusan" => ($keputusan == 1) ? "layak" : "tidak layak"
         ];
         return $result;
+    }
+
+    private function generateUniqueTicket(): string
+    {
+        do {
+            $ticket = substr(bin2hex(random_bytes(8)), 0, 12);
+        } while ($this->model->where('ticket', $ticket)->exists());
+
+        return $ticket;
     }
 }
