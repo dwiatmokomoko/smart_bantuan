@@ -11,38 +11,37 @@ use Yajra\DataTables\Facades\DataTables;
 
 class DataTestingController extends Controller
 {
-    private $menu;
+    private string $menu;
     private DataTestingRepository $repository;
     private CriteriaRepository $criteriaRepository;
 
-    function __construct(DataTestingRepository $repository, CriteriaRepository $criteriaRepository)
+    public function __construct(DataTestingRepository $repository, CriteriaRepository $criteriaRepository)
     {
         $this->menu = "Data Uji";
         $this->repository = $repository;
         $this->criteriaRepository = $criteriaRepository;
     }
 
-    function datas(Request $request)
+    public function datas(Request $request)
     {
-        if ($request->ajax()) {
-            try {
-                $data = $this->repository->getDataTesting();
-                // dd($data);
-            } catch (Exception $e) {
-                dd($e);
-            }
-            return DataTables::of($data)
-                ->addIndexColumn()
-                ->editColumn("kelayakan", function ($row) {
-                    return ($row->kelayakan == 1) ? "<p class='text-success font-weight-bold'>Layak<p/>" : "<p class='text-danger font-weight-bold'>Tidak Layak<p/>";
-                })
-                ->rawColumns(['kelayakan'])
-                ->make(true);
+        abort_unless($request->ajax(), 404);
+
+        try {
+            // hanya status = 1
+            $data = $this->repository->getDataTesting();
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()]);
         }
+
+        return DataTables::of($data)
+            ->addIndexColumn()
+            // Tampilkan prob_layak sebagai float (6 desimal), tanpa kolom kelayakan
+            ->editColumn('prob_layak', fn($row) =>
+                is_null($row->prob_layak) ? null : (float) $row->prob_layak
+            )
+            ->make(true);
     }
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
         $data["criteria"] = $this->criteriaRepository->getAll()->toArray();

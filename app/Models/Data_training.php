@@ -16,12 +16,12 @@ class Data_training extends Model
     ];
 
     protected $casts = [
-        'penghasilan'       => 'decimal:4',
-        'pekerjaan'         => 'decimal:4',
-        'perkawinan'        => 'decimal:4',
-        'calon_penghuni'    => 'decimal:4',
-        'status_penempatan' => 'decimal:4',
-        'prob_layak'        => 'decimal:6',
+        'penghasilan'        => 'float',
+        'pekerjaan'          => 'float',
+        'status_penempatan'  => 'float',
+        'calon_penghuni'     => 'float',
+        'perkawinan'         => 'float',
+        'prob_layak'         => 'float',
         'kelayakan'         => 'integer',
         'status'            => 'integer',
     ];
