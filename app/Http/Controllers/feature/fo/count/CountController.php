@@ -49,52 +49,29 @@ class CountController extends Controller
         return view('feature.fo.count.index', compact('subCriterias'));
     }
 
-public function predict(Request $request)
-{
-    $validated = $request->validate([
-        'name'              => 'required|string',
-        'nik'               => 'required|numeric',
-        'jenis_kelamin'     => 'required|string',
-        'penghasilan'       => 'required|numeric',
-        'pekerjaan'         => 'required|numeric',
-        'perkawinan'        => 'required|numeric',
-        'calon_penghuni'    => 'required|numeric',
-        'status_penempatan' => 'required|numeric'
-    ]);
 
-    $inputData = $request->only([
-        'name','nik','jenis_kelamin','penghasilan','pekerjaan',
-        'perkawinan','calon_penghuni','status_penempatan'
-    ]);
+    public function predict(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string',
+            'nik' => 'required|numeric',
+            'jenis_kelamin' => 'required|string',
+            'penghasilan' => 'required|numeric',
+            'pekerjaan' => 'required|numeric',
+            'perkawinan' => 'required|numeric',
+            'calon_penghuni' => 'required|numeric',
+            'status_penempatan' => 'required|numeric',
+        ]);
 
-    // label sub-kriteria untuk tampilan
-    $subAll = $this->subCriteriaRepository->getAll();
-    $map = function ($w, $cid) use ($subAll) {
-        $row = $subAll->where('weight', $w)->where('criteria_id', $cid)->first();
-        return $row ? $row->name : 'Data Tidak Ditemukan (Weight: '.$w.')';
-    };
-    $inputLabel = [
-        'penghasilan'       => $map($inputData['penghasilan'], 1),
-        'pekerjaan'         => $map($inputData['pekerjaan'], 2),
-        'perkawinan'        => $map($inputData['perkawinan'], 3),
-        'calon_penghuni'    => $map($inputData['calon_penghuni'], 4),
-        'status_penempatan' => $map($inputData['status_penempatan'], 5),
-    ];
+        // jalankan perhitungan & penyimpanan (service yg sudah kamu update)
+        $res = $this->service->train($validated);   // $res['ticket'] tersedia
 
-    // Jalankan service -> menyimpan ke DB, mengembalikan ticket
-    $result = $this->service->train($inputData);
+        // agar ada notifikasi di halaman upload
+        session()->flash('success', 'Perhitungan selesai. Silakan unggah berkas.');
 
-    // simpan ticket ke session agar bisa dipakai saat upload berkas
-    if (!empty($result['ticket'])) {
-        session(['last_ticket' => $result['ticket']]);
+        // ⬅️ langsung ke halaman Upload Berkas sambil membawa ticket
+        return redirect()->route('fo.berkas.create', ['ticket' => $res['ticket']]);
     }
 
-    return view('feature.fo.count.result', [
-        'data_input' => $inputData,
-        'input_label'=> $inputLabel,
-        'keputusan'  => $result['keputusan'],
-        'ticket'     => $result['ticket'] ?? null, // <— penting!
-    ]);
-}
 
 }

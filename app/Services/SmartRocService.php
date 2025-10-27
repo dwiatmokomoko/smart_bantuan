@@ -3,92 +3,95 @@
 namespace App\Services;
 
 use App\Models\Data_training;
-use App\Repositories\SubCriteriaRepository;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class SmartRocService
 {
-
     private Data_training $model;
-    private SubCriteriaRepository $repo;
 
-    function __construct(Data_training $model, SubCriteriaRepository $repo)
+    // Bobot final per kriteria (sesuai permintaan)
+    private const W = [
+        'penghasilan'       => 0.4566,
+        'pekerjaan'         => 0.2567,
+        'status_penempatan' => 0.1567,
+        'calon_penghuni'    => 0.09,
+        'perkawinan'        => 0.04,
+    ];
+
+    public function __construct(Data_training $model)
     {
         $this->model = $model;
-        $this->repo = $repo;
     }
 
-    public function train($data_uji)
+    /**
+     * $dataUji: [
+     *   name, nik, jenis_kelamin,
+     *   penghasilan, pekerjaan, perkawinan, calon_penghuni, status_penempatan  (semua angka)
+     * ]
+     */
+    public function train(array $dataUji): array
     {
-        $features = [
-            'penghasilan',
-            'pekerjaan',
-            'perkawinan',
-            'calon_penghuni',
-            'status_penempatan'
-        ];
+        // Ambil baris MIN dan PEMBAGI dari data_trainings
+        // (pastikan 2 baris ini memang ada di DB).
+        $rowMin     = (array) DB::table('data_trainings')->where('name', 'MIN')->first() ?: [];
+        $rowPembagi = (array) DB::table('data_trainings')->where('name', 'PEMBAGI')->first() ?: [];
 
-
-
-        $sub = $this->repo->grouped()->toArray();
-
-        $total_data = $this->model->count();
-        $total_layak = $this->model->where('kelayakan', 1)->count();
-        $total_tidak_layak = $this->model->where('kelayakan', 0)->count();
-
-        $probability_layak = $total_layak / $total_data;
-        $probability_tidak_layak = $total_tidak_layak / $total_data;
-
-        $temp = [];
-        foreach ($features as $index => $feature) {
-            $k = $index + 1;
-            $alpha = 1;
-            foreach ($sub["{$k}"] as $subc) {
-                $vl = $this->model->where($feature, $data_uji[$feature])->where('kelayakan', '=', 1)->get(['id', $feature, 'kelayakan'])->count();
-                $vtl = $this->model->where($feature, $data_uji[$feature])->where('kelayakan', '=', 0)->get(['id', $feature, 'kelayakan'])->count();
-                $temp["layak"][$feature] = ($vl + $alpha) / ($alpha + $total_layak);
-                $temp["tidak_layak"][$feature] = ($vtl + $alpha) / ($alpha + $total_tidak_layak);
+        // Helper untuk hitung (x - MIN) / PEMBAGI dengan aman
+        $norm = function (string $field, float $x) use ($rowMin, $rowPembagi): float {
+            $min = isset($rowMin[$field]) ? (float) $rowMin[$field] : 0.0;
+            $div = isset($rowPembagi[$field]) ? (float) $rowPembagi[$field] : 0.0;
+            if ($div == 0.0) {
+                // bila pembagi 0, anggap 0 agar tidak division by zero
+                return 0.0;
             }
-        }
+            return ($x - $min) / $div;
+        };
 
-        $mpcl = 1;
-        $mpctl = 1;
-        foreach ($temp["layak"] as $rec) {
-            $mpcl *= $rec;
-        }
+        // 1) Normalisasi → Xi
+        $x1 = $norm('penghasilan',       (float) $dataUji['penghasilan']);
+        $x2 = $norm('pekerjaan',         (float) $dataUji['pekerjaan']);
+        $x3 = $norm('status_penempatan', (float) $dataUji['status_penempatan']);
+        $x4 = $norm('calon_penghuni',    (float) $dataUji['calon_penghuni']);
+        $x5 = $norm('perkawinan',        (float) $dataUji['perkawinan']);
 
-        foreach ($temp["tidak_layak"] as $rec) {
-            $mpctl *= $rec;
-        }
+        // 2) Bobotkan → nilai yang DISIMPAN
+        $vPenghasilan       = $x1 * self::W['penghasilan'];
+        $vPekerjaan         = $x2 * self::W['pekerjaan'];
+        $vStatusPenempatan  = $x3 * self::W['status_penempatan'];
+        $vCalonPenghuni     = $x4 * self::W['calon_penghuni'];
+        $vPerkawinan        = $x5 * self::W['perkawinan'];
 
-        $layak = $mpcl * $probability_layak;
-        $tidak_layak = $mpctl * $probability_tidak_layak;
-        $keputusan = ($layak > $tidak_layak) ? 1 : 0;
-        $data_uji['kelayakan'] = $keputusan;
-        $data_uji['prob_layak'] = $layak;
-        $data_uji['prob_tidak_layak'] = $tidak_layak;
-        $data_uji['status'] = 1;
-        $data_uji['created_by'] = "guest";
-        $data_uji['ticket'] = $this->generateUniqueTicket();
+        // 3) Probabilitas layak = jumlah bobot
+        $probLayak = $vPenghasilan + $vPekerjaan + $vStatusPenempatan + $vCalonPenghuni + $vPerkawinan;
 
-        $this->model->create($data_uji);
+        // 4) Simpan ke DB (kelayakan selalu 1)
+        $ticket = $this->generateUniqueTicket();
 
-        $result = [
-            "data_input" => $data_uji,
-            "ticket" => $data_uji['ticket'],
-            "total_data" => $total_data,
-            "total_layak" => $total_layak,
-            "total_tidak_layak" => $total_tidak_layak,
-            "probability_layak" => $probability_layak,
-            "probability_tidak_layak" => $probability_tidak_layak,
-            "temp" => $temp,
-            "total_perkalian_kelayakan" => $mpcl,
-            "total_perkalian_ketidak_layakan" => $mpctl,
-            "prob_layak" => $layak,
-            "prob_tidak_layak" => $tidak_layak,
-            "keputusan" => ($keputusan == 1) ? "layak" : "tidak layak"
+        $payload = [
+            'name'               => $dataUji['name'],
+            'ticket'             => $ticket,
+
+            // simpan nilai HASIL (Xi × bobot) sesuai instruksi
+            'penghasilan'        => $vPenghasilan,
+            'pekerjaan'          => $vPekerjaan,
+            'perkawinan'         => $vPerkawinan,
+            'calon_penghuni'     => $vCalonPenghuni,
+            'status_penempatan'  => $vStatusPenempatan,
+
+            'kelayakan'          => 1,               // semua dinyatakan layak
+            'prob_layak'         => $probLayak,
+            'status'             => 1,               // data testing
+            'created_by'         => (string) (Auth::id() ?? 'guest'),
         ];
-        return $result;
+
+        $this->model->create($payload);
+
+        return [
+            'ticket'     => $ticket,
+            'prob_layak' => $probLayak,
+            'saved'      => $payload,
+        ];
     }
 
     private function generateUniqueTicket(): string

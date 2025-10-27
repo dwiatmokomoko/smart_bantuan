@@ -8,7 +8,7 @@
                     <div class="card mb-0">
                         <div class="card-body">
                             <div class="text-nowrap logo-img text-center d-block py-3 w-100">
-                                <img src="{{asset("fo/img/silayak-logo2.png")}}" width="180" alt="">
+                                <img src="{{asset("fo/img/silayak-logo2.png")}}" width="180" alt="" class="rounded-circle">
                             </div>
                             <p class="text-center">SISTEM INFORMASI MANAJEMEN</br>KELAYAKAN RUSUNAWA</p>
                             <form method="POST" action="{{ route("admin.auth") }}">

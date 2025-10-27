@@ -49,7 +49,7 @@
                 serverSide: true,
                 ajax: "{{ route('criterias.data', [], false) }}",
                 order: [
-                    [1, 'asc']
+                    [2, 'asc']
                 ], // urut by name
                 columns: [{
                         data: 'DT_RowIndex',
@@ -67,13 +67,13 @@
                         render: function(data) {
                             const w = parseInt(data, 10);
                             switch (w) {
-                                case 20:
+                                case 45:
                                     return 5;
-                                case 16:
+                                case 26:
                                     return 4;
-                                case 12:
+                                case 15:
                                     return 3;
-                                case 8:
+                                case 10:
                                     return 2;
                                 case 4:
                                     return 1;

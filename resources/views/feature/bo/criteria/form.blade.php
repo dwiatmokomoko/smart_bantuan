@@ -24,17 +24,17 @@
                         <label for="weight" class="form-label">Bobot</label>
                         <div class="input-group mb-3">
                             <select id="weight" name="weight" class="form-select">
-                                <option value="20"
-                                    {{ isset($data['record']) && $data['record']['weight'] == 20 ? 'selected' : '' }}>5
+                                <option value="45"
+                                    {{ isset($data['record']) && $data['record']['weight'] == 45 ? 'selected' : '' }}>5
                                 </option>
-                                <option value="16"
-                                    {{ isset($data['record']) && $data['record']['weight'] == 16 ? 'selected' : '' }}>4
+                                <option value="26"
+                                    {{ isset($data['record']) && $data['record']['weight'] == 26 ? 'selected' : '' }}>4
                                 </option>
-                                <option value="12"
-                                    {{ isset($data['record']) && $data['record']['weight'] == 12 ? 'selected' : '' }}>3
+                                <option value="15"
+                                    {{ isset($data['record']) && $data['record']['weight'] == 15 ? 'selected' : '' }}>3
                                 </option>
-                                <option value="8"
-                                    {{ isset($data['record']) && $data['record']['weight'] == 8 ? 'selected' : '' }}>2
+                                <option value="10"
+                                    {{ isset($data['record']) && $data['record']['weight'] == 10 ? 'selected' : '' }}>2
                                 </option>
                                 <option value="4"
                                     {{ isset($data['record']) && $data['record']['weight'] == 4 ? 'selected' : '' }}>1

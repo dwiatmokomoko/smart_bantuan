@@ -1,32 +1,28 @@
 <?php
+// app/Models/Data_training.php
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-// app/Models/Data_training.php
 class Data_training extends Model
 {
+    protected $table = 'data_trainings';
+
     protected $fillable = [
-        'name',
-        'ticket',
-        'penghasilan',
-        'pekerjaan',
-        'perkawinan',
-        'calon_penghuni',
-        'status_penempatan',
-        'kelayakan',
-        'status',
-        'created_by',
-        'updated_by',
-        'prob_layak',
-        'prob_tidak_layak',
+        'name','ticket',
+        'penghasilan','pekerjaan','perkawinan','calon_penghuni','status_penempatan',
+        'kelayakan','prob_layak','status','created_by','updated_by'
     ];
 
     protected $casts = [
-        'prob_layak' => 'float',
-        'prob_tidak_layak' => 'float',
+        'penghasilan'       => 'decimal:4',
+        'pekerjaan'         => 'decimal:4',
+        'perkawinan'        => 'decimal:4',
+        'calon_penghuni'    => 'decimal:4',
+        'status_penempatan' => 'decimal:4',
+        'prob_layak'        => 'decimal:6',
+        'kelayakan'         => 'integer',
+        'status'            => 'integer',
     ];
 }
-
