@@ -98,7 +98,7 @@ $(function () {
         d.end_date   = $('#end_date').val() || '';
       }
     },
-    order: [[4, 'desc']], // kolom "Tanggal Pengajuan"
+    order: [[3, 'asc']], // kolom "Tanggal Pengajuan"
     columns: [
       {data:'DT_RowIndex', name:'DT_RowIndex', orderable:false, searchable:false, className:'text-center'},
       {data:'user_name',   name:'u.name'},
