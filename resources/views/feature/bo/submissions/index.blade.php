@@ -18,10 +18,10 @@
               <th class="text-center">No</th>
               <th>Nama</th>
               <th>No HP</th>
-              <th>Kelayakan</th>
-              <th>Prob. Layak</th> {{-- aktifkan --}}
+              {{-- <th>Kelayakan</th> --}}
+              <th>Nilai Kelayakan</th> {{-- aktifkan --}}
+              <th>Tanggal Pengajuan</th>
               <th>Status Berkas</th>
-              <th>Created</th>
               <th class="text-center">Aksi</th>
             </tr>
           </thead>
@@ -47,10 +47,10 @@ $(function () {
       {data:'DT_RowIndex', name:'DT_RowIndex', orderable:false, searchable:false, className:'text-center'},
       {data:'user_name',   name:'u.name'},
       {data:'no_hp',       name:'u.no_hp', defaultContent:'-'},
-      {data:'kelayakan',   name:'dt.kelayakan'},
+    //   {data:'kelayakan',   name:'dt.kelayakan'},
       {data:'prob_layak',  name:'dt.prob_layak'},   // << tampilkan
-      {data:'berkas_status', name:'ub.status', orderable:false, searchable:false},
       {data:'created_at',  name:'ub.created_at'},
+      {data:'berkas_status', name:'ub.status', orderable:false, searchable:false},
       {data:'action',      name:'action', orderable:false, searchable:false, className:'text-center'}
     ]
   });

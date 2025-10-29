@@ -20,12 +20,12 @@
             <tr>
               <th class="text-center w-1">No</th>
               <th class="text-start">Nama</th>
-              <th class="text-center">K1</th>
-              <th class="text-center">K2</th>
-              <th class="text-center">K3</th>
-              <th class="text-center">K4</th>
-              <th class="text-center">K5</th>
-              <th class="text-center">Prob. Layak</th>
+              <th class="text-center">C1</th>
+              <th class="text-center">C2</th>
+              <th class="text-center">C3</th>
+              <th class="text-center">C4</th>
+              <th class="text-center">C5</th>
+              <th class="text-center">Hasil Akhir</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -38,11 +38,11 @@
           <div class="col-md-8">
             <h5>Keterangan :</h5>
             <ul class="mb-0">
-              <li>K1 : Penghasilan</li>
-              <li>K2 : Pekerjaan</li>
-              <li>K3 : Status Penempatan</li>
-              <li>K4 : Calon Penghuni</li>
-              <li>K5 : Perkawinan</li>
+              <li>C1 : Penghasilan</li>
+              <li>C2 : Pekerjaan</li>
+              <li>C3 : Status Penempatan</li>
+              <li>C4 : Calon Penghuni</li>
+              <li>C5 : Perkawinan</li>
             </ul>
           </div>
         </div>

@@ -71,7 +71,7 @@
             </div>
 
             <!-- Slide 2 -->
-            <div class="hero__item set-bg" data-setbg="https://www.batiktv.id/home/assets/img/news/30_3.png">
+            <div class="hero__item set-bg" data-setbg="https://dsp.uii.ac.id/wp-content/uploads/2024/05/Rusunawa-Putri-httpsmaps.app_.goo_.gl7wBzED4Apux3CfLe7-2.png">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-7">

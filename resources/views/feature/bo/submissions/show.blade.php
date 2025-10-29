@@ -35,7 +35,7 @@
                             <tr><th>NIK</th><td>{{ $rec->nik }}</td></tr>
                             <tr><th>Email</th><td>{{ $rec->email }}</td></tr>
                             <tr><th>No. HP</th><td>{{ $rec->no_hp ?? '-' }}</td></tr>
-                            <tr><th>Tiket</th><td>{{ $rec->ticket ?? '-' }}</td></tr>
+                            <tr><th>Kode Pendaftaran</th><td>{{ $rec->ticket ?? '-' }}</td></tr>
                             <tr><th>Status Berkas</th><td>{!! $statusBadge !!}</td></tr>
                             <tr><th>Pengajuan</th><td>{{ $rec->ub_created_at }}</td></tr>
                         </table>
