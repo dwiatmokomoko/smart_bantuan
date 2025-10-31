@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="{{ asset('bo/css/dataTables.bootstrap5.min.css') }}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
-  .dt-inputs .form-control{max-width:220px}
+  .filters .form-control { max-width: 220px; }
 </style>
 @endpush
 
@@ -13,25 +13,32 @@
 <div class="container-fluid">
   <div class="card mt-4">
     <div class="card-body">
+      <h5 class="card-title fw-semibold mb-3">Daftar Pengajuan Rusunawa</h5>
 
-      <h5 class="card-title fw-semibold mb-4">Daftar Pengajuan Rusunawa</h5>
-
-      {{-- Filter tanggal --}}
-      <div class="row g-2 dt-inputs mb-3">
-        <div class="col-auto">
-          <input type="date" id="start_date" class="form-control" placeholder="Mulai">
+      {{-- Filter tanggal + Sort --}}
+      <div class="d-flex gap-2 align-items-end mb-3 filters">
+        <div>
+          <label class="form-label mb-1">Dari</label>
+          <input type="date" id="date_from" class="form-control">
         </div>
-        <div class="col-auto">
-          <input type="date" id="end_date" class="form-control" placeholder="Selesai">
+        <div>
+          <label class="form-label mb-1">Sampai</label>
+          <input type="date" id="date_to" class="form-control">
         </div>
-        <div class="col-auto">
-          <button id="btnFilter" class="btn btn-primary"><i class="ti ti-filter"></i> Filter</button>
-          <button id="btnReset" class="btn btn-outline-secondary"><i class="ti ti-reload"></i> Reset</button>
+        <div>
+          <label class="form-label mb-1">Urutkan</label>
+          <select id="sort_prob" class="form-control">
+            <option value="">— default —</option>
+            <option value="desc">Nilai Kelayakan Tertinggi</option>
+            <option value="asc">Nilai Kelayakan Terendah</option>
+          </select>
         </div>
+        <button id="btnFilter" class="btn btn-primary">Terapkan</button>
+        <button id="btnReset" class="btn btn-outline-secondary">Reset</button>
       </div>
 
       <div class="table-responsive">
-        <table class="table table-striped" id="submissions_table">
+        <table class="table table-striped" id="submissions_table" width="100%">
           <thead>
             <tr>
               <th class="text-center">No</th>
@@ -40,44 +47,14 @@
               <th>Nilai Kelayakan</th>
               <th>Tanggal Pengajuan</th>
               <th>Status Berkas</th>
-              <th>Keterangan</th> {{-- NEW --}}
+              <th>Keterangan</th> {{-- <- baru --}}
               <th class="text-center">Aksi</th>
             </tr>
           </thead>
           <tbody></tbody>
         </table>
       </div>
-    </div>
-  </div>
-</div>
 
-{{-- Modal Tolak --}}
-<div class="modal fade" id="modalReject" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-md modal-dialog-centered">
-    <div class="modal-content">
-      <form id="formReject" method="POST">
-        @csrf
-        <input type="hidden" name="status" value="rejected">
-        <div class="modal-header">
-          <h5 class="modal-title">Tolak Pengajuan</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="x"></button>
-        </div>
-        <div class="modal-body">
-          <div class="mb-2">
-            <label class="form-label">Nama Pemohon</label>
-            <input type="text" id="rejectNama" class="form-control" readonly>
-          </div>
-          <div class="mb-2">
-            <label class="form-label">Keterangan / Alasan Penolakan</label>
-            <textarea class="form-control" name="notes" id="rejectNotes" rows="4" placeholder="Contoh: KTP tidak sesuai, KK buram, dsb" required></textarea>
-          </div>
-          <div class="text-muted small">Keterangan ini akan muncul di tabel & bisa disertakan pada pesan WhatsApp.</div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
-          <button type="submit" class="btn btn-danger">Tolak Pengajuan</button>
-        </div>
-      </form>
     </div>
   </div>
 </div>
@@ -87,60 +64,133 @@
 <script src="{{ asset('bo/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('bo/js/dataTables.bootstrap5.min.js') }}"></script>
 <script>
-$(function () {
+(function(){
+  const csrf = '{{ csrf_token() }}';
+
+  // inisialisasi DataTable
   const table = $('#submissions_table').DataTable({
     processing: true,
     serverSide: true,
     ajax: {
       url: "{{ route('admin.submissions.data', [], false) }}",
       data: function(d){
-        d.start_date = $('#start_date').val() || '';
-        d.end_date   = $('#end_date').val() || '';
+        d.date_from = $('#date_from').val() || '';
+        d.date_to   = $('#date_to').val() || '';
       }
     },
-    order: [[3, 'asc']], // kolom "Tanggal Pengajuan"
+    order: [[4, 'desc']], // default urut created_at desc
     columns: [
       {data:'DT_RowIndex', name:'DT_RowIndex', orderable:false, searchable:false, className:'text-center'},
       {data:'user_name',   name:'u.name'},
       {data:'no_hp',       name:'u.no_hp', defaultContent:'-'},
-      {data:'prob_layak',  name:'dt.prob_layak'},
+      {data:'prob_layak',  name:'dt.prob_layak'},     // sortable numeric (server-side)
       {data:'created_at',  name:'ub.created_at'},
       {data:'berkas_status', name:'ub.status', orderable:false, searchable:false},
-      {data:'notes',       name:'ub.notes'}, // Keterangan
+      {data:'notes',       name:'ub.notes', defaultContent:'-', render:(d)=> d ? d : '-'}, // kolom keterangan
       {data:'action',      name:'action', orderable:false, searchable:false, className:'text-center'}
-    ]
+    ],
+    language: {
+      paginate: { next: "›", previous: "‹" }
+    }
   });
 
+  // Filter tanggal
   $('#btnFilter').on('click', () => table.ajax.reload());
-  $('#btnReset').on('click', function(){
-    $('#start_date, #end_date').val('');
+  $('#btnReset').on('click', () => {
+    $('#date_from').val(''); $('#date_to').val(''); $('#sort_prob').val('');
+    table.order([[4,'desc']]).draw();      // reset order
     table.ajax.reload();
   });
 
-  // Buka modal Tolak
-  $(document).on('click', '.btn-reject', function(){
-    const url  = $(this).data('url');
-    const nama = $(this).data('nama');
-    $('#formReject').attr('action', url);
-    $('#rejectNama').val(nama);
-    $('#rejectNotes').val('');
-    const modal = new bootstrap.Modal(document.getElementById('modalReject'));
-    modal.show();
+  // Sort by nilai kelayakan
+  $('#sort_prob').on('change', function(){
+    const v = $(this).val();
+    if(!v) { table.order([[4,'desc']]).draw(); return; } // kembali ke created_at desc
+    // kolom prob_layak index = 3
+    table.order([[3, v]]).draw();
   });
 
-  // Submit Tolak (AJAX agar tabel langsung refresh)
-  $('#formReject').on('submit', function(e){
-    e.preventDefault();
-    const $f = $(this);
-    $.post($f.attr('action'), $f.serialize())
-      .done(function(){
-        bootstrap.Modal.getInstance(document.getElementById('modalReject')).hide();
-        table.ajax.reload(null, false);
-      })
-      .fail(function(xhr){
-        alert('Gagal memperbarui status. ' + (xhr.responseJSON?.message || ''));
-      });
+  // Approve
+  $(document).on('click', '.btn-approve', function(){
+    const url = $(this).data('url');
+    $.post({
+      url: url,
+      data: { _token: csrf, status: 'approved' },
+      success: () => table.ajax.reload(null,false),
+      error:   (xhr)=> alert('Gagal memperbarui status:\n' + (xhr.responseJSON?.message || xhr.statusText))
+    });
   });
-});
+
+  // Reject (wajib isi notes/keterangan)
+  $(document).on('click', '.btn-reject', function(){
+    const url = $(this).data('url');
+    const notes = prompt('Tulis keterangan penolakan (contoh: KTP buram / KK tidak sesuai dll.):');
+    if(notes === null) return; // cancel
+    if(notes.trim() === ''){
+      alert('Keterangan wajib diisi saat menolak.');
+      return;
+    }
+    $.post({
+      url: url,
+      data: { _token: csrf, status: 'rejected', notes: notes.trim() },
+      success: () => table.ajax.reload(null,false),
+      error:   (xhr)=> alert('Gagal memperbarui status:\n' + (xhr.responseJSON?.message || xhr.statusText))
+    });
+  });
+
+  // Tombol WA (template otomatis)
+  $(document).on('click', '.btn-wa', function(){
+    const hp     = $(this).data('hp');
+    const name   = $(this).data('name');
+    const ticket = $(this).data('ticket') || '-';
+    const status = $(this).data('status');            // pending / approved / rejected
+    const notes  = $(this).data('notes') || '';
+
+    let text = '';
+    if(status === 'approved'){
+      text =
+`Halo, Bapak/Ibu ${name} 👋
+Kami informasikan bahwa status pengajuan Anda telah disetujui untuk melanjutkan ke tahap wawancara calon penghuni Rusunawa.
+
+Saat proses wawancara, silahkan membawa berkas-berkas berikut ini:
+- Fotokopi KTP
+- Fotokopi KK
+- Fotokopi Surat Nikah/Akta cerai hiduop/ Akta kematian
+- Surat Pernyataan Belum Memiliki Rumah
+- Surat Pernyataan Penghasilan / Slip Gaji
+- SKCK yang masih berlaku
+- Pas Foto ukuran 4 x 6 masing-masing anggota keluarga
+
+Untuk jadwal wawancara, akan kami informasikan lebih lanjut melalui pesan WhatsApp ini.
+Terima kasih atas perhatian dan kerjasamanya 🙏
+
+Salam,
+Tim Pengelola Rusunawa Kota Yogyakarta
+(Tiket: ${ticket})`;
+    } else if(status === 'rejected'){
+      const alasan = notes ? notes : 'alasan penolakan terlampir pada sistem';
+      text =
+`Halo, Bapak/Ibu ${name} 🙏
+Kami informasikan bahwa status pengajuan Anda belum dapat disetujui.
+
+Berdasarkan hasil verifikasi berkas, pengajuan belum memenuhi kriteria karena ${alasan}.
+
+Terima kasih atas pengertian dan perhatiannya 🙏
+
+Salam,
+Tim Pengelola Rusunawa Kota Yogyakarta
+(Tiket: ${ticket})`;
+    } else {
+      text =
+`Halo ${name}, terima kasih telah mengajukan permohonan RUSUNAWA (Tiket ${ticket}).
+Berkas Anda sudah kami terima dan saat ini sedang dalam proses verifikasi.
+Kami akan menghubungi Anda kembali setelah proses selesai. Terima kasih 🙏`;
+    }
+
+    const url = 'https://wa.me/' + hp + '?text=' + encodeURIComponent(text);
+    window.open(url, '_blank');
+  });
+
+})();
 </script>
 @endpush
