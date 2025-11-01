@@ -125,6 +125,11 @@
                                 Untuk pertanyaan lebih lanjut atau kolaborasi, silakan kunjungi halaman
                                 <a href="{{ route('fo.ourteam.index') }}">kontak</a> kami.
                             </p>
+                            <p>
+                                Detail informasi Rusunawa bisa diklik
+                                <a href="https://drive.google.com/file/d/1jJ3dnEG75FBmIhcRr_a3wF0h_Dw7Tym0/view?usp=sharing">di sini.</a>
+                            </p>
+
                         </div>
                     </div>
                 </div>

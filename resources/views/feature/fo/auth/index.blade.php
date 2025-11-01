@@ -51,8 +51,8 @@
                   <input class="form-check-input" type="checkbox" name="remember" id="remember">
                   <label class="form-check-label" for="remember">Ingat saya</label>
                 </div> --}}
-                <a class="small text-decoration-none" href="{{ route('pre-eligibility.form') }}">Belum punya akun?Daftar Di sini </a> <br>
-                <a class="small text-decoration-none" href="{{ route('admin.login') }}">Login Sebagai Admin</a>
+                <a class="small text-decoration-none" href="{{ route('pre-eligibility.form') }}">Belum punya akun? Daftar Di sini </a> <br>
+                {{-- <a class="small text-decoration-none" href="{{ route('admin.login') }}">Login Sebagai Admin</a> --}}
               </div>
 
               <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-2 rounded-2">Sign In</button>
