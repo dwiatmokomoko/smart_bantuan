@@ -54,6 +54,7 @@
             opacity: .8;
         }
     </style>
+    @stack('style')
 </head>
 
 <body>
@@ -83,6 +84,8 @@
     <script src="{{ asset('fo/js/jquery.slicknav.js') }}"></script>
     <script src="{{ asset('fo/js/owl.carousel.min.js') }}"></script>
     <script src="{{ asset('fo/js/main.js') }}"></script>
+
+    @stack('script')
 </body>
 
 </html>
