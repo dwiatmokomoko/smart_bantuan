@@ -49,16 +49,16 @@
 
     <h2 class="gc-title">Petunjuk Penggunaan Sistem Klasifikasi Penerima Rusunawa</h2>
     <br>
-    <div class="gc-sub">Alur singkat: <strong>Pra-Kelayakan → Registrasi → Login → Hitung → (LAYAK) Upload Berkas → Riwayat</strong></div>
+    <div class="gc-sub">Alur singkat: <strong>Pra-Kelayakan → Registrasi → Login → Lengkapi Data → Upload Berkas → Riwayat</strong></div>
 
-    <div class="gc-cta">
+    {{-- <div class="gc-cta">
       <a href="{{ route('pre-eligibility.form') }}" class="gc-btn gc-btn-primary"><i class="fa fa-check-circle"></i> Mulai Pra-Kelayakan</a>
       @guest('web')
         <a href="{{ route('user.login') }}" class="gc-btn gc-btn-ghost"><i class="fa fa-sign-in"></i> Login User</a>
       @else
         <a href="{{ route('fo.count.index') }}" class="gc-btn gc-btn-ghost"><i class="fa fa-calculator"></i> Hitung Kelayakan</a>
       @endguest
-    </div>
+    </div> --}}
 <br>
     <div class="gc-grid">
 
@@ -95,19 +95,19 @@
       </div>
 <br>
       <!-- Langkah 4 -->
-      <div class="gc-card">
+      {{-- <div class="gc-card">
         <div class="gc-step">Langkah 4</div>
         <h4 class="gc-h4">Hasil Prediksi</h4>
         <div class="gc-lines">
           <div class="gc-line">Sistem menampilkan rekomendasi <strong>LAYAK</strong> atau <strong>TIDAK LAYAK</strong>.</div>
           <div class="gc-line">Jika <strong>LAYAK</strong>, tombol <strong>Upload Berkas</strong> muncul pada halaman hasil.</div>
         </div>
-      </div>
+      </div> --}}
 <br>
       <!-- Langkah 5 -->
       <div class="gc-card">
-        <div class="gc-step">Langkah 5</div>
-        <h4 class="gc-h4">Upload Berkas (Untuk Hasil LAYAK)</h4>
+        <div class="gc-step">Langkah 4</div>
+        <h4 class="gc-h4">Upload Berkas</h4>
         <div class="gc-lines">
           <div class="gc-line">Unggah berkas (foto/PDF): KTP, KK, Surat Pernyataan Belum Memiliki Rumah, Slip Gaji/Surat Penghasilan, SKCK.</div>
           <div class="gc-line gc-hint">Selesai upload, sistem otomatis mengarahkan ke <strong>Riwayat Pengajuan</strong>.</div>
@@ -116,23 +116,23 @@
 <br>
       <!-- Langkah 6 -->
       <div class="gc-card">
-        <div class="gc-step">Langkah 6</div>
+        <div class="gc-step">Langkah 5</div>
         <h4 class="gc-h4">Riwayat Pengajuan & Status</h4>
         <div class="gc-lines">
           <div class="gc-line">Menu <strong>Pengajuan</strong> berubah menjadi <strong>Riwayat Pengajuan</strong> bila berkas sudah diunggah.</div>
-          <div class="gc-line">Pantau status proses: <em>Menunggu Verifikasi / Disetujui / Ditolak</em> beserta catatan admin.</div>
+          <div class="gc-line">Pantau status proses: <em>Pengajuan / Interview / Disetujui / Ditolak</em> beserta catatan admin.</div>
           <div class="gc-line">Semua berkas yang diunggah dapat dilihat/diunduh kembali dari halaman ini.</div>
         </div>
       </div>
 <br>
     </div>
 
-    <div class="gc-cta" style="margin-top:18px">
+    {{-- <div class="gc-cta" style="margin-top:18px">
       <a href="{{ route('pre-eligibility.form') }}" class="gc-btn gc-btn-primary">Mulai Pra-Kelayakan</a>
       @auth('web')
         <a href="{{ route('fo.count.index') }}" class="gc-btn gc-btn-ghost">Hitung Kelayakan</a>
       @endauth
-    </div>
+    </div> --}}
 
   </div>
 </section>
