@@ -30,13 +30,16 @@
                                     <h5 class="h3-content">Data Diri</h5>
                                     <div class="mb-3">
                                         <label class="form-label">Nama Calon Penerima Bantuan</label>
-                                        <input type="text" name="name" class="form-control"
-                                            placeholder="Nama Calon Penerima Bantuan" id="name" required>
+                                        <input type="text" class="form-control"
+                                            value="{{ old('name', $user->name ?? '') }}" readonly>
+                                        <input type="hidden" name="name" value="{{ old('name', $user->name ?? '') }}">
                                     </div>
+
                                     <div class="mb-3">
                                         <label class="form-label">Nomor Induk Kependudukan</label>
-                                        <input type="text" name="nik" class="form-control"
-                                            placeholder="Nomor Induk Kependudukan" id="nik" required>
+                                        <input type="text" class="form-control"
+                                            value="{{ old('nik', $user->nik ?? '') }}" readonly>
+                                        <input type="hidden" name="nik" value="{{ old('nik', $user->nik ?? '') }}">
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">Jenis Kelamin</label>
