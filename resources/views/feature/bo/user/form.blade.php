@@ -9,7 +9,7 @@
                 <div class="card-body table-responsive">
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <h5 class="card-title fw-semibold mb-4">{{ $data['form_status'] }} Kriteria</h5>
+                            <h5 class="card-title fw-semibold mb-4">{{ $data['form_status'] }} Admin</h5>
                         </div>
                     </div>
                     <form method="POST" action="{{ route('user.store') }}">
@@ -40,7 +40,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="name" class="form-label">Kata Kunci</label>
+                            <label for="name" class="form-label">Kata Sandi</label>
                             <input type="password" name="password" class="form-control" placeholder="kata kunci"
                                 id="password" aria-describedby="nameHelp"
                                 value="">

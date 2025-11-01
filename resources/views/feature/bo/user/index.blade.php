@@ -54,7 +54,7 @@
                 },
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('users.data') }}",
+                ajax: "{{ route('users.data', [], false) }}", 
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex'
