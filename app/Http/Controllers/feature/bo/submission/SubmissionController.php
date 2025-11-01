@@ -9,78 +9,78 @@ use Yajra\DataTables\Facades\DataTables;
 
 class SubmissionController extends Controller
 {
-    private $menu;
-
-    public function __construct()
-    {
-        $this->menu = "Pengajuan";
-    }
+    private $menu = 'Pengajuan';
 
     public function index()
     {
-        $data["menu"] = $this->menu;
-        return view('feature.bo.submissions.index', compact("data"));
+        $data['menu'] = $this->menu;
+        return view('feature.bo.submissions.index', compact('data'));
     }
 
     public function data(Request $request)
     {
         abort_unless($request->ajax(), 404);
 
-        // --- filter tanggal dari DataTables (optional)
-        $from = $request->get('date_from');
-        $to   = $request->get('date_to');
-
         $qb = DB::table('user_berkas as ub')
             ->join('users as u', 'u.id', '=', 'ub.user_id')
             ->leftJoin('data_trainings as dt', 'dt.ticket', '=', 'ub.ticket')
-            ->select([
-                'ub.id as ub_id',
-                'u.name as user_name',
-                'u.email',
-                'u.nik',
-                'u.no_hp',
-                'ub.ticket',
-                DB::raw("dt.kelayakan as kelayakan"),
-                DB::raw("dt.prob_layak as prob_layak"),
-                'ub.status as berkas_status',
-                'ub.notes',                 // <— keterangan dari admin
-                'ub.created_at',
-            ]);
+            ->selectRaw("
+                ub.id as ub_id,
+                u.name as user_name,
+                u.email,
+                u.nik,
+                u.no_hp,
+                ub.ticket,
+                ub.status as berkas_status,
+                ub.notes,
+                ub.created_at,
+                dt.kelayakan,
+                dt.prob_layak
+            ");
 
-        if ($from && $to) {
-            $qb->whereBetween(DB::raw('DATE(ub.created_at)'), [$from, $to]);
-        } elseif ($from) {
-            $qb->whereDate('ub.created_at', '>=', $from);
-        } elseif ($to) {
-            $qb->whereDate('ub.created_at', '<=', $to);
+        // filter tanggal (opsional) dari request
+        if ($request->filled('date_from')) {
+            $qb->whereDate('ub.created_at', '>=', $request->date_from);
+        }
+        if ($request->filled('date_to')) {
+            $qb->whereDate('ub.created_at', '<=', $request->date_to);
         }
 
-        $qb->orderByDesc('ub.created_at');
+        // order custom: jika minta sort by prob_layak
+        if ($request->filled('order_prob') && $request->order_prob === 'desc') {
+            $qb->orderByDesc('dt.prob_layak');
+        } elseif ($request->filled('order_prob') && $request->order_prob === 'asc') {
+            $qb->orderBy('dt.prob_layak');
+        } else {
+            $qb->orderByDesc('ub.created_at');
+        }
 
         return DataTables::of($qb)
             ->addIndexColumn()
-            ->editColumn('kelayakan', function ($row) {
-                if (is_null($row->kelayakan)) return '-';
-                return ((int)$row->kelayakan === 1 ? 'LAYAK' : 'TIDAK LAYAK');
-            })
-            // jangan format prob_layak agar sorting server-side by numeric tetap akurat
             ->editColumn('prob_layak', function ($row) {
-                return is_null($row->prob_layak) ? '-' : number_format((float)$row->prob_layak, 6, '.', '');
+                return is_null($row->prob_layak) ? '-' : number_format((float)$row->prob_layak, 4, '.', '');
+            })
+            ->addColumn('kelas', function ($row) {
+                if (is_null($row->prob_layak)) return '-';
+                $p = (float)$row->prob_layak;
+                if ($p <= 0.4500) return '<span class="badge bg-secondary">Kurang direkomendasikan</span>';
+                if ($p <= 0.7000) return '<span class="badge bg-info">Cukup direkomendasikan</span>';
+                return '<span class="badge bg-success">Direkomendasikan</span>';
             })
             ->editColumn('berkas_status', function ($row) {
-                $map = [
-                    'pending'  => '<span class="badge bg-warning">Menunggu Verifikasi</span>',
-                    'approved' => '<span class="badge bg-success">Disetujui</span>',
-                    'rejected' => '<span class="badge bg-danger">Ditolak</span>',
-                ];
-                return $map[$row->berkas_status] ?? e($row->berkas_status);
+                return match ($row->berkas_status) {
+                    'approved'  => '<span class="badge bg-success">Disetujui</span>',
+                    'rejected'  => '<span class="badge bg-danger">Ditolak</span>',
+                    'interview' => '<span class="badge bg-primary">Wawancara</span>',
+                    default     => '<span class="badge bg-warning text-dark">Pengajuan</span>',
+                };
             })
-            ->editColumn('created_at', fn($r) => $r->created_at ?: '-')
+            ->editColumn('created_at', fn($r) => $r->created_at ? $r->created_at : '-')
             ->addColumn('action', function ($row) {
                 $detailUrl = route('admin.submissions.show', $row->ub_id, false);
                 $statusUrl = route('admin.submissions.status', $row->ub_id, false);
 
-                // normalisasi no hp -> 62xxxxxxxx
+                // Normalisasi HP -> 62xxxxxxxxxx
                 $hp = preg_replace('/\D+/', '', (string)($row->no_hp ?? ''));
                 if ($hp !== '') {
                     if (str_starts_with($hp, '0')) $hp = '62' . substr($hp, 1);
@@ -88,41 +88,53 @@ class SubmissionController extends Controller
                 }
 
                 $ticket = $row->ticket ?? '-';
+                $nama   = $row->user_name ?? '-';
+                $alasan = trim((string)($row->notes ?? ''));
 
-                // template WA diset di JS; di sini kirim data yang diperlukan via data-*
-                $waBtn = '';
-                if ($hp !== '') {
-                    $waBtn = '<button type="button"
-                               class="btn btn-sm btn-outline-success me-1 btn-wa"
-                               data-hp="'.$hp.'"
-                               data-name="'.e($row->user_name).'"
-                               data-ticket="'.e($ticket).'"
-                               data-status="'.e($row->berkas_status).'"
-                               data-notes="'.e($row->notes ?? '').'">
-                               <i class="fa-brands fa-whatsapp"></i> WA
-                              </button>';
-                }
+                // Pesan WA:
+                $waMsgRejected = "Halo, Bapak/Ibu {$nama} 🙏%0AKami informasikan bahwa status pengajuan Anda belum dapat disetujui.%0A%0ABerdasarkan hasil verifikasi berkas, pengajuan belum memenuhi kriteria karena {$alasan}.%0A%0ATerima kasih atas pengertian dan perhatiannya 🙏%0A%0ASalam,%0ATim Pengelola Rusunawa Kota Yogyakarta";
+                $waMsgInterview = "Halo, Bapak/Ibu {$nama} 👋%0AKami informasikan bahwa status pengajuan Anda telah disetujui untuk melanjutkan ke tahap wawancara calon penghuni Rusunawa (Tiket {$ticket}).%0A%0ASaat proses wawancara, silahkan membawa berkas-berkas berikut ini:%0A- Fotokopi KTP%0A- Fotokopi KK%0A- Fotokopi Surat Nikah/Akta cerai hidup/Akta kematian%0A- Surat Pernyataan Belum Memiliki Rumah%0A- Surat Pernyataan Penghasilan / Slip Gaji%0A- SKCK yang masih berlaku%0A- Pas Foto ukuran 4 x 6 masing-masing anggota keluarga%0A%0AUntuk jadwal wawancara, akan kami informasikan lebih lanjut melalui pesan WhatsApp ini.%0ATerima kasih atas perhatian dan kerjasamanya 🙏%0A%0ASalam,%0ATim Pengelola Rusunawa Kota Yogyakarta";
+                $waMsgPending   = "Halo {$nama}, terima kasih telah mengajukan permohonan RUSUNAWA (Tiket {$ticket}). Berkas Anda kami terima dan sedang proses verifikasi. 🙏";
+                $waMsgApproved  = "Halo {$nama}, pengajuan RUSUNAWA (Tiket {$ticket}) telah DISETUJUI. Terima kasih. 🙏";
 
-                $approveBtn = '<button type="button"
-                                  class="btn btn-sm btn-success me-1 btn-approve"
-                                  data-url="'.$statusUrl.'">
-                                  <i class="ti ti-check"></i>
-                               </button>';
+                $waText = $waMsgPending;
+                if ($row->berkas_status === 'interview') $waText = $waMsgInterview;
+                elseif ($row->berkas_status === 'rejected') $waText = $waMsgRejected;
+                elseif ($row->berkas_status === 'approved') $waText = $waMsgApproved;
 
-                // pada reject wajib isi notes → diminta via prompt di JS
-                $rejectBtn = '<button type="button"
-                                 class="btn btn-sm btn-danger me-1 btn-reject"
-                                 data-url="'.$statusUrl.'">
-                                 <i class="ti ti-x"></i>
-                              </button>';
+                $waBtn = ($hp !== '')
+                    ? '<a href="https://wa.me/' . $hp . '?text=' . $waText . '" target="_blank" class="btn btn-sm btn-outline-success me-1"><i class="fa-brands fa-whatsapp"></i></a>'
+                    : '';
 
-                $detailBtn = '<a href="' . $detailUrl . '" class="btn btn-sm btn-outline-primary">
-                                <i class="ti ti-eye"></i>
-                              </a>';
+                // Tombol perubahan status:
+                // pengajuan -> wawancara
+                $interviewForm = '<form method="POST" action="' . $statusUrl . '" class="d-inline">'
+                    . csrf_field()
+                    . '<input type="hidden" name="status" value="interview">'
+                    . '<button type="submit" class="btn btn-sm btn-primary me-1" title="Ubah ke Wawancara"><i class="ti ti-users"></i></button>'
+                    . '</form>';
 
-                return $approveBtn . $rejectBtn . $waBtn . $detailBtn;
+                // wawancara -> approved
+                $approveForm = '<form method="POST" action="' . $statusUrl . '" class="d-inline">'
+                    . csrf_field()
+                    . '<input type="hidden" name="status" value="approved">'
+                    . '<button type="submit" class="btn btn-sm btn-success me-1" title="Setujui"><i class="ti ti-check"></i></button>'
+                    . '</form>';
+
+                // tolak (pakai notes)
+                $rejectForm = '<form method="POST" action="' . $statusUrl . '" class="d-inline frm-reject" data-id="' . $row->ub_id . '">'
+                    . csrf_field()
+                    . '<input type="hidden" name="status" value="rejected">'
+                    . '<input type="hidden" name="notes" value="">'
+                    . '<button type="button" class="btn btn-sm btn-danger btn-reject" title="Tolak"><i class="ti ti-x"></i></button>'
+                    . '</form>';
+
+                $detailBtn = '<a href="' . $detailUrl . '" class="btn btn-sm btn-outline-primary" title="Detail"><i class="ti ti-eye"></i></a>';
+
+                return $interviewForm . $approveForm . $rejectForm . $waBtn . $detailBtn;
             })
-            ->rawColumns(['berkas_status', 'action'])
+            ->addColumn('notes_show', fn($row) => e($row->notes ?? '-'))
+            ->rawColumns(['berkas_status', 'kelas', 'action'])
             ->toJson();
     }
 
@@ -132,75 +144,48 @@ class SubmissionController extends Controller
             ->join('users as u', 'u.id', '=', 'ub.user_id')
             ->leftJoin('data_trainings as dt', 'dt.ticket', '=', 'ub.ticket')
             ->select([
-                'ub.id as ub_id',
-                'ub.user_id',
-                'ub.ticket',
-                'ub.ktp_path',
-                'ub.kk_path',
-                'ub.surat_belum_memiliki_rumah_path',
-                'ub.slip_gaji_path',
-                'ub.skck_path',
-                'ub.status as berkas_status',
-                'ub.notes',
-                'ub.created_at as ub_created_at',
-
-                'u.name as user_name',
-                'u.email',
-                'u.nik',
-                'u.no_hp',
-
-                'dt.id as dt_id',
-                'dt.kelayakan',
-                'dt.prob_layak',
-                'dt.created_at as dt_created_at',
-            ])
-            ->where('ub.id', $id)
-            ->first();
+                'ub.id as ub_id','ub.user_id','ub.ticket',
+                'ub.ktp_path','ub.kk_path','ub.surat_belum_memiliki_rumah_path','ub.slip_gaji_path','ub.skck_path',
+                'ub.status as berkas_status','ub.notes','ub.created_at as ub_created_at',
+                'u.name as user_name','u.email','u.nik','u.no_hp',
+                'dt.id as dt_id','dt.kelayakan','dt.prob_layak','dt.created_at as dt_created_at',
+            ])->where('ub.id',$id)->first();
 
         abort_unless($rec, 404);
 
         $statusBadge = match ($rec->berkas_status) {
-            'approved' => '<span class="badge bg-success">Disetujui</span>',
-            'rejected' => '<span class="badge bg-danger">Ditolak</span>',
-            default     => '<span class="badge bg-warning">Menunggu Verifikasi</span>',
+            'approved'  => '<span class="badge bg-success">Disetujui</span>',
+            'rejected'  => '<span class="badge bg-danger">Ditolak</span>',
+            'interview' => '<span class="badge bg-primary">Wawancara</span>',
+            default     => '<span class="badge bg-warning text-dark">Pengajuan</span>',
         };
 
         $files = [
-            ['label' => 'KTP', 'path' => $rec->ktp_path],
-            ['label' => 'KK', 'path' => $rec->kk_path],
-            ['label' => 'Surat Belum Memiliki Rumah', 'path' => $rec->surat_belum_memiliki_rumah_path],
-            ['label' => 'Slip Gaji / Surat Penghasilan', 'path' => $rec->slip_gaji_path],
-            ['label' => 'SKCK', 'path' => $rec->skck_path],
+            ['label'=>'KTP', 'path'=>$rec->ktp_path],
+            ['label'=>'KK', 'path'=>$rec->kk_path],
+            ['label'=>'Surat Belum Memiliki Rumah', 'path'=>$rec->surat_belum_memiliki_rumah_path],
+            ['label'=>'Slip Gaji / Surat Penghasilan', 'path'=>$rec->slip_gaji_path],
+            ['label'=>'SKCK', 'path'=>$rec->skck_path],
         ];
 
-        $data["menu"] = $this->menu;
-
-        return view('feature.bo.submissions.show', [
-            'data'        => $data,
-            'rec'         => $rec,
-            'statusBadge' => $statusBadge,
-            'files'       => $files,
-        ]);
+        $data['menu'] = $this->menu;
+        return view('feature.bo.submissions.show', compact('data','rec','statusBadge','files'));
     }
 
     public function updateStatus(Request $request, int $id)
     {
         $data = $request->validate([
-            'status' => ['required', 'in:pending,approved,rejected'],
-            'notes'  => ['nullable', 'string', 'max:2000'],
+            'status' => ['required','in:pengajuan,interview,approved,rejected'],
+            'notes'  => ['nullable','string','max:2000'],
         ]);
 
-        DB::table('user_berkas')
-            ->where('id', $id)
-            ->update([
-                'status'     => $data['status'],
-                'notes'      => $data['notes'] ?? null,
-                'updated_at' => now(),
-            ]);
+        DB::table('user_berkas')->where('id',$id)->update([
+            'status'     => $data['status'],
+            'notes'      => $data['notes'] ?? null,
+            'updated_at' => now(),
+        ]);
 
-        if ($request->wantsJson()) {
-            return response()->json(['ok' => true]);
-        }
-        return back()->with('success', 'Status berkas diperbarui.');
+        if ($request->wantsJson()) return response()->json(['ok'=>true]);
+        return back()->with('success','Status berkas diperbarui.');
     }
 }
