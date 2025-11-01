@@ -8,6 +8,7 @@ use App\Http\Controllers\feature\bo\data_training\DataTrainingController;
 use App\Http\Controllers\feature\bo\sub_criteria\SubCriteriaController;
 use App\Http\Controllers\feature\bo\user\UserController;
 use App\Http\Controllers\feature\bo\submission\SubmissionController;
+use App\Http\Controllers\feature\bo\user\FoUserController;
 
 use App\Http\Controllers\feature\fo\home\Home_foController;
 use App\Http\Controllers\feature\fo\about\About_foController;
@@ -49,6 +50,17 @@ Route::group(['prefix' => 'admin'], function () {
 
         Route::resource('/user', UserController::class);
         Route::get('users', [UserController::class, 'datas'])->name("users.data");
+
+
+
+
+        // Data USER (warga) – hanya yang registrasi di FO (tabel users)
+        Route::get('/fo-users', [FoUserController::class, 'index'])->name('fo-users.index');
+        Route::get('/fo-users/data', [FoUserController::class, 'datas'])->name('fo-users.data');
+        Route::get('/fo-users/{id}/edit', [FoUserController::class, 'edit'])->name('fo-users.edit');        // opsional
+        Route::delete('/fo-users/{id}', [FoUserController::class, 'destroy'])->name('fo-users.destroy');
+
+
 
         Route::get('/submissions', [SubmissionController::class, 'index'])->name('admin.submissions.index');
         Route::get('/submissions/data', [SubmissionController::class, 'data'])

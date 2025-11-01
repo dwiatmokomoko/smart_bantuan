@@ -88,16 +88,16 @@
                 <span>
                     <i class="ti ti-login"></i>
                 </span>
-                <span class="hide-menu">Data Pengguna</span>
+                <span class="hide-menu">List Admin</span>
             </a>
         </li>
-        {{-- <li class="sidebar-item">
-            <a class="sidebar-link" href="./authentication-register.html" aria-expanded="false">
+        <li class="sidebar-item">
+            <a class="sidebar-link" href="{{ route('fo-users.index') }}" aria-expanded="false">
                 <span>
                     <i class="ti ti-user-plus"></i>
                 </span>
-                <span class="hide-menu">Profil Pengguna</span>
+                <span class="hide-menu">List User</span>
             </a>
-        </li> --}}
+        </li>
     </ul>
 </nav>
