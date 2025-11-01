@@ -30,7 +30,7 @@
             <tr>
               <th>#</th>
               <th>Tanggal</th>
-              <th>Ticket</th>
+              <th>Kode Pendaftaran</th>
               <th>Status</th>
               <th>Berkas</th>
             </tr>
@@ -64,7 +64,7 @@
                   <a class="btn btn-sm btn-outline-secondary"
                      href="{{ Storage::url($row->surat_belum_memiliki_rumah_path) }}" target="_blank">Surat Perny.</a>
                   <a class="btn btn-sm btn-outline-secondary"
-                     href="{{ Storage::url($row->slip_gaji_path) }}" target="_blank">Slip Gaji/Surat</a>
+                     href="{{ Storage::url($row->slip_gaji_path) }}" target="_blank">Slip Gaji</a>
                   <a class="btn btn-sm btn-outline-secondary"
                      href="{{ Storage::url($row->skck_path) }}" target="_blank">SKCK</a>
                 </div>

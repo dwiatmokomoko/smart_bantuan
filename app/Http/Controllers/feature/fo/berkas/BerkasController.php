@@ -32,16 +32,16 @@ class BerkasController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'ktp'   => ['required', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:5120'],
-            'kk'    => ['required', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:5120'],
+            'ktp' => ['required', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:5120'],
+            'kk' => ['required', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:5120'],
             'surat_belum_memiliki_rumah' => ['required', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:5120'],
             'slip_gaji' => ['required', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:5120'],
-            'skck'  => ['required', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:5120'],
-            'ticket'=> ['nullable', 'string', 'max:64'],
+            'skck' => ['required', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:5120'],
+            'ticket' => ['nullable', 'string', 'max:64'],
         ]);
 
         $userId = auth('web')->id();
-        $dir    = 'berkas/' . $userId;
+        $dir = 'berkas/' . $userId;
 
         // 1) Pastikan punya ticket supaya bisa di-join dengan data_trainings
         $ticket = $validated['ticket']
@@ -63,8 +63,8 @@ class BerkasController extends Controller
             try {
                 // 2) Upload semua file
                 $paths = [
-                    'ktp_path'  => $request->file('ktp')->store($dir, 'public'),
-                    'kk_path'   => $request->file('kk')->store($dir, 'public'),
+                    'ktp_path' => $request->file('ktp')->store($dir, 'public'),
+                    'kk_path' => $request->file('kk')->store($dir, 'public'),
                     'surat_belum_memiliki_rumah_path' => $request->file('surat_belum_memiliki_rumah')->store($dir, 'public'),
                     'slip_gaji_path' => $request->file('slip_gaji')->store($dir, 'public'),
                     'skck_path' => $request->file('skck')->store($dir, 'public'),
@@ -81,7 +81,7 @@ class BerkasController extends Controller
                 $existing = $query->first();
 
                 if ($existing) {
-                    // hapus file lama agar storage rapi
+                    // hapus file lama...
                     $this->deleteIfExists($existing->ktp_path);
                     $this->deleteIfExists($existing->kk_path);
                     $this->deleteIfExists($existing->surat_belum_memiliki_rumah_path);
@@ -90,17 +90,17 @@ class BerkasController extends Controller
 
                     // update
                     $existing->update([
-                        'ticket' => $ticket,              // bisa null, tapi lebih baik tidak
+                        'ticket' => $ticket,
                         ...$paths,
-                        'status' => 'pending',            // enum valid
+                        'status' => 'pengajuan',   // <— DULUNYA 'pending'
                     ]);
                 } else {
                     // create
                     UserBerkas::create([
                         'user_id' => $userId,
-                        'ticket'  => $ticket,             // jika null, join ke data_trainings tidak akan terjadi
+                        'ticket' => $ticket,
                         ...$paths,
-                        'status'  => 'pending',
+                        'status' => 'pengajuan',  // <— DULUNYA 'pending'
                     ]);
                 }
 
