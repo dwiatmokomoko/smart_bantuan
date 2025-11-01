@@ -71,9 +71,9 @@
             </div>
 
             <!-- Slide 2 -->
-            <div class="hero__item set-bg" data-setbg="{{ asset('fo/img/rusun.jpeg') }}
+            {{-- <div class="hero__item set-bg" data-setbg="{{ asset('fo/img/rusun.jpeg') }}
             {{-- https://dsp.uii.ac.id/wp-content/uploads/2024/05/Rusunawa-Putri-httpsmaps.app_.goo_.gl7wBzED4Apux3CfLe7-2.png --}}
-            ">
+            {{-- ">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-7">
@@ -98,7 +98,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>  --}}
         </div>
     </section>
     <!-- Hero Section End -->
