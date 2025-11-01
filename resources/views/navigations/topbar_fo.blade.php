@@ -56,19 +56,20 @@
                         {{-- Login/Logout --}}
                         @guest('web')
                             <li class="{{ request()->is('user/login') ? 'active' : '' }}">
-                                <a href="{{ route('user.login') }}">LOGIN</a>
+                                <a href="{{ route('user.login') }}" class="nav-link text-white">LOGIN</a>
                             </li>
                         @else
                             <li class="{{ request()->is('user/logout') ? 'active' : '' }}">
-                                <form id="logout-form" action="{{ route('user.logout') }}" method="POST"
-                                    onsubmit="return confirm('Anda sudah login. Apakah Anda ingin logout?');">
+                                <a href="#" class="nav-link text-white"
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    LOGOUT {{ strtok(auth('web')->user()->name, ' ') }}
+                                </a>
+                                <form id="logout-form" action="{{ route('user.logout') }}" method="POST" class="d-none">
                                     @csrf
-                                    <button type="submit" class="btn btn-link p-0 m-0 align-baseline text-decoration-none">
-                                        LOGOUT {{ strtok(auth('web')->user()->name, ' ') }}
-                                    </button>
                                 </form>
                             </li>
                         @endguest
+
 
                     </ul>
                 </nav>

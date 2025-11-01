@@ -52,17 +52,12 @@
                                     alternatif memakai
                                     <strong>SMART</strong> agar rekomendasi lebih transparan dan tepat sasaran.
                                 </p>
-                                @auth('web')
-                                    <div class="{{ request()->is('pra-kelayakan*') ? 'active' : '' }}">
-                                        <a href="{{ route('pre-eligibility.form') }}" class="primary-btn">Cek Kelayakan
-                                            Sekarang</a>
-                                    </div>
-                                @else
+
                                     <div>
-                                        <a href="{{ route('user.login') }}" class="primary-btn">Cek Kelayakan
+                                        <a href="{{ route('fo.contact.index') }}" class="primary-btn">Ajukan
                                             Sekarang</a>
                                     </div>
-                                @endauth
+
 
                             </div>
                         </div>

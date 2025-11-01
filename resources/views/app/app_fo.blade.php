@@ -23,24 +23,37 @@
     <link rel="stylesheet" href="{{ asset('fo/css/slicknav.min.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ asset('fo/css/style.css') }}" type="text/css">
     <style>
-    .hero-section {
-        position: relative;
-        overflow: hidden;
-    }
+        .hero-section {
+            position: relative;
+            overflow: hidden;
+        }
 
-    .hero__item {
-        height: 100vh; /* 100% tinggi layar */
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        display: flex;
-        align-items: center;
-    }
+        .hero__item {
+            height: 100vh;
+            /* 100% tinggi layar */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            align-items: center;
+        }
 
-    .hero__text {
-        color: #fff;
-    }
-</style>
+        .hero__text {
+            color: #fff;
+        }
+
+        .navbar .nav-link {
+            color: #fff !important;
+            /* putih */
+            font: inherit;
+            /* font sama seperti LOGIN */
+            text-decoration: none;
+        }
+
+        .navbar .nav-link:hover {
+            opacity: .8;
+        }
+    </style>
 </head>
 
 <body>
