@@ -66,11 +66,11 @@ class SmartRocService
         // C1 Penghasilan: 0.04, C2 Pekerjaan: 0.10, C3 Status Penempatan: 0.15,
         // C4 Calon Penghuni: 0.26, C5 Perkawinan: 0.45
         $w = [
-            'penghasilan'       => 0.04,
-            'pekerjaan'         => 0.10,
-            'status_penempatan' => 0.15,
-            'calon_penghuni'    => 0.26,
-            'perkawinan'        => 0.45,
+            'penghasilan'       => 0.4567,
+            'pekerjaan'         => 0.2567,
+            'status_penempatan' => 0.1567,
+            'calon_penghuni'    => 0.09,
+            'perkawinan'        => 0.04,
         ];
 
         // 5) Hitung nilai ter-bobot untuk masing-masing kolom

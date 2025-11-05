@@ -74,7 +74,7 @@
                                     <div class="mb-3">
                                         <label class="form-label">Penghasilan</label>
                                         <select name="penghasilan" class="form-control" id="penghasilan">
-                                            @foreach ($subCriterias->where('criteria_id', 1)->sortBy('weight') as $item)
+                                            @foreach ($subCriterias->where('criteria_id', 1)->sortBy('id') as $item)
                                                 <option value="{{ $item->weight }}">{{ $item->name }}</option>
                                             @endforeach
                                         </select>
@@ -91,7 +91,7 @@
                                     <div class="mb-3">
                                         <label class="form-label">Calon Penghuni</label>
                                         <select name="calon_penghuni" class="form-control" id="calon_penghuni">
-                                            @foreach ($subCriterias->where('criteria_id', 4)->sortBy('weight') as $item)
+                                            @foreach ($subCriterias->where('criteria_id', 4)->sortBy('name') as $item)
                                                 <option value="{{ $item->weight }}">{{ $item->name }}</option>
                                             @endforeach
                                         </select>
