@@ -20,6 +20,7 @@ use App\Http\Controllers\feature\fo\diagnosis\DiagnosisController;
 use App\Http\Controllers\feature\fo\auth\UserAuthController;
 use App\Http\Controllers\feature\fo\berkas\BerkasController;
 use App\Http\Controllers\feature\fo\pengajuan\PengajuanController;
+use App\Http\Controllers\feature\fo\pengajuan\PengajuanDetailController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -110,6 +111,10 @@ Route::middleware('auth:web')->group(function () {
         ->name('fo.berkas.store');
     Route::get('/pengajuan/riwayat', [PengajuanController::class, 'history'])
         ->name('fo.pengajuan.history');
+    Route::get('/pengajuan/{ticket}/kriteria', [PengajuanDetailController::class, 'kriteria'])
+        ->name('fo.pengajuan.kriteria');
+    Route::get('/pengajuan/{ticket}/berkas', [PengajuanDetailController::class, 'berkas'])
+        ->name('fo.pengajuan.berkas');
 });
 
 // Group User (auth web)

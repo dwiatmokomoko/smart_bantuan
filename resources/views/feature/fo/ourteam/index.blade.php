@@ -61,10 +61,10 @@
 
                 <div class="col-12 col-sm-6 col-lg-4 d-flex justify-content-center">
                     <div class="col-card testimonial__item h-100 text-center" style="max-width:360px;">
-                        <img src="{{ asset('fo/img/testimonial/peni.jpeg') }}" alt="" class="rounded-circle"
+                        <img src="{{ asset('fo/img/testimonial/pakjemi.jpeg') }}" alt="" class="rounded-circle"
                             style="width:160px;height:160px;object-fit:cover;margin-top:-40px;">
-                        <h5 class="mt-3">Lorem Ipsum</h5>
-                        <span>24330021</span>
+                        <h5 class="mt-3">Jemmy Edwin Bororing, S.Kom., M.Eng.</h5>
+                        <span>DOSEN PENGAMPU</span>
                         <div class="icons mt-3">
                             <a href="https://wa.me/6282136352767"><i class="fa fa-whatsapp"></i></a>
                             <a href="mailto:21330055@janabadra.web.id" class="ms-3"><i class="fa fa-envelope"></i></a>

@@ -9,11 +9,27 @@ use App\Models\UserBerkas;
 
 class PengajuanController extends Controller
 {
+    // Contoh method history() di FO
     public function history()
     {
-        $berkas = UserBerkas::where('user_id', auth('web')->id())
-                    ->latest()->get();
+        $user = auth('web')->user();
 
-        return view('feature.fo.pengajuan.history', compact('berkas'));
+        $berkas = \App\Models\UserBerkas::where('user_id', $user->id)
+            ->latest()->get();
+
+        $labelsByTicket = [];
+        if ($berkas->isNotEmpty()) {
+            $tickets = $berkas->pluck('ticket')->filter()->unique()->values();
+            $trainRows = \App\Models\Data_training::whereIn('ticket', $tickets)
+                ->get(['ticket', 'input_label']);
+            foreach ($trainRows as $tr) {
+                $labelsByTicket[$tr->ticket] = $tr->input_label
+                    ? json_decode($tr->input_label, true) : null;
+            }
+        }
+
+        return view('feature.fo.pengajuan.history', compact('berkas', 'labelsByTicket'));
     }
+
+
 }

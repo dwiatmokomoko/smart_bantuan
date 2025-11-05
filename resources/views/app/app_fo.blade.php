@@ -84,6 +84,7 @@
     <script src="{{ asset('fo/js/jquery.slicknav.js') }}"></script>
     <script src="{{ asset('fo/js/owl.carousel.min.js') }}"></script>
     <script src="{{ asset('fo/js/main.js') }}"></script>
+    <script src="{{ asset('bo/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
 
     @stack('script')
 </body>
