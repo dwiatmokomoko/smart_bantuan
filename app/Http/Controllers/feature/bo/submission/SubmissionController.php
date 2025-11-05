@@ -145,8 +145,11 @@ class SubmissionController extends Controller
             ->toJson();
     }
 
+    // app/Http/Controllers/feature/bo/submission/SubmissionController.php
+
     public function show($id)
     {
+        // Ambil record utama + hasil hitung + RAW ( *_raw ) + input_label
         $rec = DB::table('user_berkas as ub')
             ->join('users as u', 'u.id', '=', 'ub.user_id')
             ->leftJoin('data_trainings as dt', 'dt.ticket', '=', 'ub.ticket')
@@ -162,18 +165,31 @@ class SubmissionController extends Controller
                 'ub.status as berkas_status',
                 'ub.notes',
                 'ub.created_at as ub_created_at',
+
                 'u.name as user_name',
                 'u.email',
                 'u.nik',
                 'u.no_hp',
+
                 'dt.id as dt_id',
                 'dt.kelayakan',
                 'dt.prob_layak',
                 'dt.created_at as dt_created_at',
-            ])->where('ub.id', $id)->first();
+
+                // RAW & label json
+                'dt.penghasilan_raw',
+                'dt.pekerjaan_raw',
+                'dt.perkawinan_raw',
+                'dt.calon_penghuni_raw',
+                'dt.status_penempatan_raw',
+                'dt.input_label',
+            ])
+            ->where('ub.id', $id)
+            ->first();
 
         abort_unless($rec, 404);
 
+        // Badge status berkas (tanpa perubahan)
         $statusBadge = match ($rec->berkas_status) {
             'approved' => '<span class="badge bg-success">Disetujui</span>',
             'rejected' => '<span class="badge bg-danger">Ditolak</span>',
@@ -181,6 +197,73 @@ class SubmissionController extends Controller
             default => '<span class="badge bg-warning text-dark">Pengajuan</span>',
         };
 
+        // ===== Klasifikasi dari prob_layak =====
+        $klasifikasi = null;
+        if (!is_null($rec->prob_layak)) {
+            $p = (float) $rec->prob_layak;
+            if ($p <= 0.4500) {
+                $klasifikasi = ['Kurang direkomendasikan', 'secondary'];
+            } elseif ($p <= 0.7000) {
+                $klasifikasi = ['Cukup direkomendasikan', 'info'];
+            } else {
+                $klasifikasi = ['Direkomendasikan', 'success'];
+            }
+        }
+        $klasifikasiBadge = $klasifikasi
+            ? '<span class="badge bg-' . $klasifikasi[1] . '">' . $klasifikasi[0] . '</span>'
+            : '-';
+
+        // ===== Siapkan label sub-kriteria =====
+        // 1) Jika kolom JSON input_label terisi, pakai itu dulu
+        $labels = null;
+        if (!empty($rec->input_label)) {
+            $parsed = json_decode($rec->input_label, true);
+            if (is_array($parsed)) {
+                // Normalisasi key agar konsisten dgn view
+                $labels = [
+                    'penghasilan' => $parsed['penghasilan'] ?? null,
+                    'pekerjaan' => $parsed['pekerjaan'] ?? null,
+                    'perkawinan' => $parsed['perkawinan'] ?? null,
+                    'calon_penghuni' => $parsed['calon_penghuni'] ?? null,
+                    'status_penempatan' => $parsed['status_penempatan'] ?? null,
+                ];
+            }
+        }
+
+        // 2) Jika JSON tidak ada/kurang lengkap, fallback berdasarkan RAW weight
+        $fetchLabel = function (int $criteriaId, $weight) {
+            if ($weight === null) {
+                return null;
+            }
+
+            // RAW di data_trainings disimpan decimal(8,2) → cast ke integer
+            // contoh "50.00" → 50 agar cocok dengan sub_criterias.weight (INT)
+            $w = is_numeric($weight) ? (int) round((float) $weight) : $weight;
+
+            return DB::table('sub_criterias')
+                ->where('criteria_id', $criteriaId)
+                ->where('weight', $w)
+                ->value('name');
+        };
+
+        // jika labels masih null atau ada yang kosong, lengkapi dari RAW
+        $labels = $labels ?? [];
+        $labels['penghasilan'] = $labels['penghasilan'] ?? $fetchLabel(1, $rec->penghasilan_raw);
+        $labels['pekerjaan'] = $labels['pekerjaan'] ?? $fetchLabel(2, $rec->pekerjaan_raw);
+        $labels['perkawinan'] = $labels['perkawinan'] ?? $fetchLabel(3, $rec->perkawinan_raw);
+        $labels['calon_penghuni'] = $labels['calon_penghuni'] ?? $fetchLabel(4, $rec->calon_penghuni_raw);
+        $labels['status_penempatan'] = $labels['status_penempatan'] ?? $fetchLabel(5, $rec->status_penempatan_raw);
+
+        // Apakah ada salah satu RAW yang terisi (untuk menampilkan baris "Raw: xx" di view)
+        $hasAnyRaw = (
+            !is_null($rec->penghasilan_raw) ||
+            !is_null($rec->pekerjaan_raw) ||
+            !is_null($rec->perkawinan_raw) ||
+            !is_null($rec->calon_penghuni_raw) ||
+            !is_null($rec->status_penempatan_raw)
+        );
+
+        // Berkas untuk panel kanan (tanpa perubahan)
         $files = [
             ['label' => 'KTP', 'path' => $rec->ktp_path],
             ['label' => 'KK', 'path' => $rec->kk_path],
@@ -190,8 +273,22 @@ class SubmissionController extends Controller
         ];
 
         $data['menu'] = $this->menu;
-        return view('feature.bo.submissions.show', compact('data', 'rec', 'statusBadge', 'files'));
+
+        return view(
+            'feature.bo.submissions.show',
+            compact(
+                'data',
+                'rec',
+                'statusBadge',
+                'files',
+                'labels',
+                'hasAnyRaw',
+                'klasifikasiBadge'
+            )
+        );
     }
+
+
 
     // app/Http/Controllers/feature/bo/submission/SubmissionController.php
 
