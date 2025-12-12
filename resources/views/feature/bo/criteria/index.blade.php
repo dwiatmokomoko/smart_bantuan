@@ -94,11 +94,13 @@
             $(document).on('click', '#deleteRow', function(event) {
                 var form = $(this).closest("form");
                 var name = $(this).data("name");
+                console.log($('.criteria_table tr.active'));
                 event.preventDefault();
                 $.confirm({
                     icon: 'fa fa-warning',
                     title: 'Yakin hapus data',
-                    content: 'Kriteria ' + name.bold() + ' akan dihapus secara permanen',
+                    content: 'Kriteria ' + $(this).data('message').bold() +
+                        ' akan di hapus secara permanen',
                     type: 'orange',
                     typeAnimated: true,
                     animationSpeed: 500,
@@ -113,14 +115,13 @@
                             text: 'Hapus',
                             btnClass: 'btn-red',
                             action: function() {
-                                form.submit(); // Pastikan form disubmit
+                                form.submit();
                             }
                         },
                         batal: function() {}
                     }
                 });
             });
-
         });
     </script>
     <script>
