@@ -40,6 +40,7 @@ class CriteriaController extends Controller
                     . '<a href="' . route('criteria.edit', $idEnc) . '" class="btn btn-outline-warning m-1"><i class="ti ti-edit"></i></a>'
                     . '<button type="button" id="deleteRow" data-message="' . $name . '" class="btn btn-outline-danger m-1"><i class="ti ti-trash"></i></button>'
                     . '</form>';
+
             })
             ->rawColumns(['action'])
             ->toJson();
