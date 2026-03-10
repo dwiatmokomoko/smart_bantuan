@@ -25,6 +25,7 @@
               <th class="text-center">C3</th>
               <th class="text-center">C4</th>
               <th class="text-center">C5</th>
+              <th class="text-center">C6</th>
               <th class="text-center">Hasil Akhir</th>
             </tr>
           </thead>
@@ -38,11 +39,12 @@
           <div class="col-md-8">
             <h5>Keterangan :</h5>
             <ul class="mb-0">
-              <li>C1 : Penghasilan</li>
-              <li>C2 : Pekerjaan</li>
-              <li>C3 : Status Penempatan</li>
-              <li>C4 : Calon Penghuni</li>
-              <li>C5 : Perkawinan</li>
+              <li>C1 : Pekerjaan</li>
+              <li>C2 : Status Hubungan Dalam Keluarga</li>
+              <li>C3 : Data Kependudukan Sinkron</li>
+              <li>C4 : Adanya Anggota Keluarga Sudah Ditanggung Iuran BPJS</li>
+              <li>C5 : Adanya Anggota Keluarga di luar keluarga inti</li>
+              <li>C6 : Kependudukan Sesuai Wilayah PBI BPJS</li>
             </ul>
           </div>
         </div>
@@ -67,11 +69,12 @@
         columns: [
           { data: 'DT_RowIndex',         name: 'DT_RowIndex', orderable:false, searchable:false, className:'text-center' },
           { data: 'name',                name: 'name' },
-          { data: 'penghasilan',         name: 'penghasilan',        className:'text-center' },
           { data: 'pekerjaan',           name: 'pekerjaan',          className:'text-center' },
-          { data: 'status_penempatan',   name: 'status_penempatan',  className:'text-center' },
-          { data: 'calon_penghuni',      name: 'calon_penghuni',     className:'text-center' },
-          { data: 'perkawinan',          name: 'perkawinan',         className:'text-center' },
+          { data: 'status_hubungan_keluarga',   name: 'status_hubungan_keluarga',  className:'text-center' },
+          { data: 'data_kependudukan_sinkron',   name: 'data_kependudukan_sinkron',  className:'text-center' },
+          { data: 'anggota_keluarga_bpjs',      name: 'anggota_keluarga_bpjs',     className:'text-center' },
+          { data: 'anggota_keluarga_luar',      name: 'anggota_keluarga_luar',     className:'text-center' },
+          { data: 'kependudukan_wilayah_pbi',   name: 'kependudukan_wilayah_pbi',  className:'text-center' },
           {
             data: 'prob_layak',
             name: 'prob_layak',

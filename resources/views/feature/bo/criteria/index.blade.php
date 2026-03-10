@@ -65,21 +65,7 @@
                         data: 'weight',
                         name: 'weight',
                         render: function(data) {
-                            const w = parseInt(data, 10);
-                            switch (w) {
-                                case 45:
-                                    return 5;
-                                case 26:
-                                    return 4;
-                                case 15:
-                                    return 3;
-                                case 10:
-                                    return 2;
-                                case 4:
-                                    return 1;
-                                default:
-                                    return w;
-                            }
+                            return parseInt(data, 10);
                         }
                     },
                     {

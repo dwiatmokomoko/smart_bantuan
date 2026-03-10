@@ -6,15 +6,15 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Repositories\SubCriteriaRepository;
-use App\Services\SmartRocService;
+use App\Services\SmartService;
 
 class CountController extends Controller
 {
     private $menu = "Counter";
     private SubCriteriaRepository $subCriteriaRepository;
-    private SmartRocService $service;
+    private SmartService $service;
 
-    public function __construct(SubCriteriaRepository $subCriteriaRepository, SmartRocService $service)
+    public function __construct(SubCriteriaRepository $subCriteriaRepository, SmartService $service)
     {
         // $this->middleware('auth:web'); // pastikan user login
         $this->subCriteriaRepository = $subCriteriaRepository;
@@ -53,12 +53,13 @@ class CountController extends Controller
     {
         // validasi opsi yang dipilih user
         $validated = $request->validate([
-            'jenis_kelamin'     => 'required|string',
-            'penghasilan'       => 'required|numeric',
-            'pekerjaan'         => 'required|numeric',
-            'perkawinan'        => 'required|numeric',
-            'calon_penghuni'    => 'required|numeric',
-            'status_penempatan' => 'required|numeric',
+            'jenis_kelamin'                => 'required|string',
+            'pekerjaan'                    => 'required|numeric',
+            'status_hubungan_keluarga'     => 'required|numeric',
+            'data_kependudukan_sinkron'    => 'required|numeric',
+            'anggota_keluarga_bpjs'        => 'required|numeric',
+            'anggota_keluarga_luar'        => 'required|numeric',
+            'kependudukan_wilayah_pbi'     => 'required|numeric',
             // name & nik tidak divalidasi dari client
         ]);
 
@@ -69,13 +70,34 @@ class CountController extends Controller
         $validated['nik']  = $user->nik;
 
         // pastikan angka benar-benar float
-        foreach (['penghasilan','pekerjaan','perkawinan','calon_penghuni','status_penempatan'] as $k) {
+        foreach (['pekerjaan','status_hubungan_keluarga','data_kependudukan_sinkron','anggota_keluarga_bpjs','anggota_keluarga_luar','kependudukan_wilayah_pbi'] as $k) {
             $validated[$k] = (float) $validated[$k];
         }
 
         $res = $this->service->train($validated); // menghasilkan ticket
 
-        session()->flash('success', 'Perhitungan selesai. Silakan unggah berkas.');
-        return redirect()->route('fo.berkas.create', ['ticket' => $res['ticket']]);
+        // Simpan hasil ke session untuk ditampilkan di result page
+        session([
+            'prediction_result' => $res,
+            'data_input' => $validated,
+        ]);
+
+        return redirect()->route('fo.count.result', ['ticket' => $res['ticket']]);
+    }
+
+    public function result(Request $request)
+    {
+        $ticket = $request->query('ticket');
+        $result = session('prediction_result');
+        $data_input = session('data_input');
+
+        if (!$result || !$data_input || $result['ticket'] !== $ticket) {
+            return redirect()->route('fo.count.index')->with('error', 'Data tidak ditemukan');
+        }
+
+        $prob_layak = $result['prob_layak'];
+        $input_label = $result['labels'];
+
+        return view('feature.fo.count.result', compact('ticket', 'prob_layak', 'input_label', 'data_input'));
     }
 }

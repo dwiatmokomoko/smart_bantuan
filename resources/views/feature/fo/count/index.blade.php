@@ -50,16 +50,18 @@
                                         </select>
                                     </div>
 
-                                    {{-- 'penghasilan',
-                                    'pekerjaan',
-                                    'perkawinan',
-                                    'tinnggal_bersama',
-                                    'status_kependudukan',
-                                    'status_kepemilikan_rumah' --}}
+                                    <div class="mb-3">
+                                        <label class="form-label">Pekerjaan</label>
+                                        <select name="pekerjaan" class="form-control" id="pekerjaan">
+                                            @foreach ($subCriterias->where('criteria_id', 1)->sortBy('weight') as $item)
+                                                <option value="{{ $item->weight }}">{{ $item->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
 
                                     <div class="mb-3">
-                                        <label class="form-label">Pekerjaan </label>
-                                        <select name="pekerjaan" class="form-control" id="pekerjaan">
+                                        <label class="form-label">Status Hubungan Dalam Keluarga</label>
+                                        <select name="status_hubungan_keluarga" class="form-control" id="status_hubungan_keluarga">
                                             @foreach ($subCriterias->where('criteria_id', 2)->sortBy('weight') as $item)
                                                 <option value="{{ $item->weight }}">{{ $item->name }}</option>
                                             @endforeach
@@ -72,34 +74,36 @@
                                 <div class="services__item">
                                     <h5 class="h3-content">Data Pendukung</h5>
                                     <div class="mb-3">
-                                        <label class="form-label">Penghasilan</label>
-                                        <select name="penghasilan" class="form-control" id="penghasilan">
-                                            @foreach ($subCriterias->where('criteria_id', 1)->sortBy('id') as $item)
+                                        <label class="form-label">Data Kependudukan Sinkron</label>
+                                        <select name="data_kependudukan_sinkron" class="form-control" id="data_kependudukan_sinkron">
+                                            @foreach ($subCriterias->where('criteria_id', 3)->sortBy('weight') as $item)
                                                 <option value="{{ $item->weight }}">{{ $item->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
 
                                     <div class="mb-3">
-                                        <label class="form-label">Perkawinan</label>
-                                        <select name="perkawinan" class="form-control" id="perkawinan">
-                                            @foreach ($subCriterias->where('criteria_id', 3)->sortBy('weight') as $item)
+                                        <label class="form-label">Adanya Anggota Keluarga Sudah Ditanggung Iuran BPJS</label>
+                                        <select name="anggota_keluarga_bpjs" class="form-control" id="anggota_keluarga_bpjs">
+                                            @foreach ($subCriterias->where('criteria_id', 4)->sortBy('weight') as $item)
                                                 <option value="{{ $item->weight }}">{{ $item->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
+
                                     <div class="mb-3">
-                                        <label class="form-label">Calon Penghuni</label>
-                                        <select name="calon_penghuni" class="form-control" id="calon_penghuni">
-                                            @foreach ($subCriterias->where('criteria_id', 4)->sortBy('name') as $item)
-                                                <option value="{{ $item->weight }}">{{ $item->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Status Penempatan</label>
-                                        <select name="status_penempatan" class="form-control" id="status_penempatan">
+                                        <label class="form-label">Adanya Anggota Keluarga di luar keluarga inti</label>
+                                        <select name="anggota_keluarga_luar" class="form-control" id="anggota_keluarga_luar">
                                             @foreach ($subCriterias->where('criteria_id', 5)->sortBy('weight') as $item)
+                                                <option value="{{ $item->weight }}">{{ $item->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Kependudukan Sesuai Wilayah PBI BPJS</label>
+                                        <select name="kependudukan_wilayah_pbi" class="form-control" id="kependudukan_wilayah_pbi">
+                                            @foreach ($subCriterias->where('criteria_id', 6)->sortBy('weight') as $item)
                                                 <option value="{{ $item->weight }}">{{ $item->name }}</option>
                                             @endforeach
                                         </select>

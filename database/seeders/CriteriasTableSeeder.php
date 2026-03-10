@@ -13,13 +13,12 @@ class CriteriasTableSeeder extends Seeder
         $now = Carbon::now();
 
         $rows = [
-            ['id'=>1,'name'=>'Penghasilan','weight'=>16,'created_by'=>1,'updated_by'=>1,'created_at'=>$now,'updated_at'=>$now],
-            ['id'=>2,'name'=>'Pekerjaan','weight'=>8,'created_by'=>1,'updated_by'=>1,'created_at'=>$now,'updated_at'=>$now],
-            ['id'=>3,'name'=>'Perkawinan','weight'=>8,'created_by'=>1,'updated_by'=>1,'created_at'=>$now,'updated_at'=>$now],
-            ['id'=>4,'name'=>'Calon Penghuni','weight'=>12,'created_by'=>1,'updated_by'=>1,'created_at'=>$now,'updated_at'=>$now],
-            ['id'=>5,'name'=>'Status kependudukan','weight'=>20,'created_by'=>1,'updated_by'=>1,'created_at'=>$now,'updated_at'=>$now],
-            ['id'=>6,'name'=>'Status kepemilikan rumah','weight'=>20,'created_by'=>1,'updated_by'=>1,'created_at'=>$now,'updated_at'=>$now],
-            ['id'=>7,'name'=>'Status Penempatan','weight'=>16,'created_by'=>1,'updated_by'=>1,'created_at'=>$now,'updated_at'=>$now],
+            ['id'=>1,'name'=>'Pekerjaan','weight'=>90,'created_by'=>1,'updated_by'=>1,'created_at'=>$now,'updated_at'=>$now],
+            ['id'=>2,'name'=>'Status Hubungan Dalam Keluarga','weight'=>60,'created_by'=>1,'updated_by'=>1,'created_at'=>$now,'updated_at'=>$now],
+            ['id'=>3,'name'=>'Data Kependudukan Sinkron','weight'=>70,'created_by'=>1,'updated_by'=>1,'created_at'=>$now,'updated_at'=>$now],
+            ['id'=>4,'name'=>'Adanya Anggota Keluarga Sudah Ditanggung Iuran BPJS','weight'=>60,'created_by'=>1,'updated_by'=>1,'created_at'=>$now,'updated_at'=>$now],
+            ['id'=>5,'name'=>'Adanya Anggota Keluarga di luar keluarga inti','weight'=>60,'created_by'=>1,'updated_by'=>1,'created_at'=>$now,'updated_at'=>$now],
+            ['id'=>6,'name'=>'Kependudukan Sesuai Wilayah PBI BPJS','weight'=>80,'created_by'=>1,'updated_by'=>1,'created_at'=>$now,'updated_at'=>$now],
         ];
 
         // Kunci unik berdasarkan PRIMARY KEY 'id'

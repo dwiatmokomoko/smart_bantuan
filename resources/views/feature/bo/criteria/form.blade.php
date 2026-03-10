@@ -23,23 +23,10 @@
 
                         <label for="weight" class="form-label">Bobot</label>
                         <div class="input-group mb-3">
-                            <select id="weight" name="weight" class="form-select">
-                                <option value="45"
-                                    {{ isset($data['record']) && $data['record']['weight'] == 45 ? 'selected' : '' }}>5
-                                </option>
-                                <option value="26"
-                                    {{ isset($data['record']) && $data['record']['weight'] == 26 ? 'selected' : '' }}>4
-                                </option>
-                                <option value="15"
-                                    {{ isset($data['record']) && $data['record']['weight'] == 15 ? 'selected' : '' }}>3
-                                </option>
-                                <option value="10"
-                                    {{ isset($data['record']) && $data['record']['weight'] == 10 ? 'selected' : '' }}>2
-                                </option>
-                                <option value="4"
-                                    {{ isset($data['record']) && $data['record']['weight'] == 4 ? 'selected' : '' }}>1
-                                </option>
-                            </select>
+                            <input type="number" id="weight" name="weight" class="form-control" 
+                                placeholder="Masukkan bobot (0-100)" min="0" max="100"
+                                value="{{ isset($data['record']) ? $data['record']['weight'] : '' }}"
+                                onchange="handleChange(this)" required>
                         </div>
 
                         <button class="float-end btn btn-primary mt-3 mb-0">Simpan</button>

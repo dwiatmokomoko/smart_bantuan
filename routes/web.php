@@ -104,6 +104,7 @@ Route::post('/pra-kelayakan/check', [PreEligibilityController::class, 'check'])-
 Route::middleware('auth:web')->group(function () {
     Route::get('/count', [CountController::class, 'index'])->name('fo.count.index');
     Route::post('/count', [CountController::class, 'predict'])->name('fo.count.predict');
+    Route::get('/count/result', [CountController::class, 'result'])->name('fo.count.result');
 
     Route::get('/berkas/upload', [BerkasController::class, 'create'])
         ->name('fo.berkas.create');

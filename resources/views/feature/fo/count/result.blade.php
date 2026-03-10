@@ -43,31 +43,43 @@
                                                 <td class="w-50 text-left pl-4">{{ $data_input['jenis_kelamin'] }}</td>
                                             </tr>
                                             <tr>
-                                                <td class="hosting__feature--item">Penghasilan</td>
-                                                <td class="w-50 text-left pl-4">{{ $input_label['penghasilan'] }}</td>
-                                            </tr>
-
-                                            <tr>
                                                 <td class="hosting__feature--item">Pekerjaan</td>
-                                                <td class="w-50 text-left pl-4">{{ $input_label['pekerjaan'] }}</td>
+                                                <td class="w-50 text-left pl-4">{{ $input_label['pekerjaan'] ?? '-' }}</td>
                                             </tr>
                                             <tr>
-                                                <td class="hosting__feature--item">Status Perkawinan</td>
-                                                <td class="w-50 text-left pl-4">{{ $input_label['perkawinan'] }}</td>
+                                                <td class="hosting__feature--item">Status Hubungan Dalam Keluarga</td>
+                                                <td class="w-50 text-left pl-4">{{ $input_label['status_hubungan_keluarga'] ?? '-' }}</td>
                                             </tr>
                                             <tr>
-                                                <td class="hosting__feature--item">Calon Penghuni</td>
-                                                <td class="w-50 text-left pl-4">{{ $input_label['calon_penghuni'] }}</td>
+                                                <td class="hosting__feature--item">Data Kependudukan Sinkron</td>
+                                                <td class="w-50 text-left pl-4">{{ $input_label['data_kependudukan_sinkron'] ?? '-' }}</td>
                                             </tr>
                                             <tr>
-                                                <td class="hosting__feature--item">Status Penempatan</td>
-                                                <td class="w-50 text-left pl-4">{{ $input_label['status_penempatan'] }}</td>
+                                                <td class="hosting__feature--item">Adanya Anggota Keluarga Sudah Ditanggung Iuran BPJS</td>
+                                                <td class="w-50 text-left pl-4">{{ $input_label['anggota_keluarga_bpjs'] ?? '-' }}</td>
                                             </tr>
                                             <tr>
-                                                <td class="hosting__feature--item font-weight-bold">Hasil Rekomendasi</td>
-                                                <td
-                                                    class="w-50 text-left pl-4 font-weight-bold {{ Str::lower($keputusan) == 'layak' ? 'text-success' : 'text-danger' }}">
-                                                    {{ Str::upper($keputusan) }}
+                                                <td class="hosting__feature--item">Adanya Anggota Keluarga di luar keluarga inti</td>
+                                                <td class="w-50 text-left pl-4">{{ $input_label['anggota_keluarga_luar'] ?? '-' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="hosting__feature--item">Kependudukan Sesuai Wilayah PBI BPJS</td>
+                                                <td class="w-50 text-left pl-4">{{ $input_label['kependudukan_wilayah_pbi'] ?? '-' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="hosting__feature--item font-weight-bold">Nilai Kelayakan</td>
+                                                <td class="w-50 text-left pl-4 font-weight-bold">{{ number_format($prob_layak, 4, '.', '') }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="hosting__feature--item font-weight-bold">Klasifikasi</td>
+                                                <td class="w-50 text-left pl-4 font-weight-bold">
+                                                    @if($prob_layak < 0.50)
+                                                        <span class="badge badge-danger">Tidak Berhak Menerima PBI BPJS</span>
+                                                    @elseif($prob_layak >= 0.50 && $prob_layak <= 0.75)
+                                                        <span class="badge badge-warning">Bisa Diupayakan Menerima PBI BPJS dengan Penyesuaian Persyaratan</span>
+                                                    @else
+                                                        <span class="badge badge-success">Berhak Menerima PBI BPJS</span>
+                                                    @endif
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -76,7 +88,7 @@
                                 <div class="mt-4 d-flex gap-2">
                                     <a href="{{ route('fo.count.index') }}" class="btn btn-secondary">Kembali</a>
 
-                                    @if (Str::lower($keputusan) === 'layak')
+                                    @if ($prob_layak >= 0.50)
                                         <a href="{{ route('fo.berkas.create',  ['ticket' => $ticket]) }}"
                                             class="btn btn-primary">
                                             Upload Berkas
