@@ -82,11 +82,12 @@
                             </p>
                             <p class="mb-0"><strong>Kriteria yang digunakan:</strong></p>
                             <ul class="pl-5 pt-2">
-                                <li>Penghasilan</li>
                                 <li>Pekerjaan</li>
-                                <li>Status Penempatan</li>
-                                <li>Status Perkawinan</li>
-                                <li>Calon Penghuni (komposisi/ketergantungan)</li>
+                                <li>Status Hubungan Dalam Keluarga</li>
+                                <li>Data Kependudukan Sinkron</li>
+                                <li>Adanya Anggota Keluarga Sudah Ditanggung Iuran BPJS</li>
+                                <li>Adanya Anggota Keluarga di luar keluarga inti</li>
+                                <li>Kependudukan Sesuai Wilayah PBI BPJS</li>
                             </ul>
                         </div>
 

@@ -114,8 +114,7 @@
                                 <strong>ROC</strong> digunakan untuk menentukan bobot kriteria berdasarkan urutan prioritas,
                                 sedangkan <strong>SMART</strong> dipakai untuk menghitung nilai akhir setiap alternatif.
                                 Kriteria yang dinilai meliputi:
-                                <strong>penghasilan, pekerjaan, status penempatan, perkawinan,</strong> dan <strong>calon
-                                    penghuni</strong>.
+                                <strong>Pekerjaan, Status Hubungan Dalam Keluarga, Data Kependudukan Sinkron, Adanya Anggota Keluarga Sudah Ditanggung Iuran BPJS, Adanya Anggota Keluarga di luar keluarga inti,</strong> dan <strong>Kependudukan Sesuai Wilayah PBI BPJS</strong>.
                             </p>
 
                             {{-- <div class="row mt-4 text-start">

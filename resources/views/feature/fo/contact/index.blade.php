@@ -132,7 +132,7 @@
         </div>
         <div class="ug-lines">
           <div class="ug-line">Masuk ke <strong>Pengajuan → Hitung Kelayakan</strong>.</div>
-          <div class="ug-line">Isi variabel: <strong>Penghasilan</strong> (kategori), <strong>Pekerjaan</strong>, <strong>Status Perkawinan</strong>, <strong>Calon Penghuni</strong> (sendiri/bersama keluarga), <strong>Status Penempatan</strong>.</div>
+          <div class="ug-line">Isi variabel: <strong>Pekerjaan</strong>, <strong>Status Hubungan Dalam Keluarga</strong>, <strong>Data Kependudukan Sinkron</strong>, <strong>Adanya Anggota Keluarga Sudah Ditanggung Iuran BPJS</strong>, <strong>Adanya Anggota Keluarga di luar keluarga inti</strong>, <strong>Kependudukan Sesuai Wilayah PBI BPJS</strong>.</div>
           <div class="ug-line">Klik <strong>Lanjut</strong> untuk memproses.</div>
         </div>
       </div>

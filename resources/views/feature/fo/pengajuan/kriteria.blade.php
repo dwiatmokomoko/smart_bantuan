@@ -48,11 +48,12 @@
         <div class="table-responsive">
           <table class="table mb-0">
             <tbody>
-              <tr><td>Penghasilan</td><td class="ps-3">{{ $labels['penghasilan'] ?? '—' }}</td></tr>
               <tr><td>Pekerjaan</td><td class="ps-3">{{ $labels['pekerjaan'] ?? '—' }}</td></tr>
-              <tr><td>Status Perkawinan</td><td class="ps-3">{{ $labels['perkawinan'] ?? '—' }}</td></tr>
-              <tr><td>Calon Penghuni</td><td class="ps-3">{{ $labels['calon_penghuni'] ?? '—' }}</td></tr>
-              <tr><td>Status Penempatan</td><td class="ps-3">{{ $labels['status_penempatan'] ?? '—' }}</td></tr>
+              <tr><td>Status Hubungan Dalam Keluarga</td><td class="ps-3">{{ $labels['status_hubungan_keluarga'] ?? '—' }}</td></tr>
+              <tr><td>Data Kependudukan Sinkron</td><td class="ps-3">{{ $labels['data_kependudukan_sinkron'] ?? '—' }}</td></tr>
+              <tr><td>Adanya Anggota Keluarga Sudah Ditanggung Iuran BPJS</td><td class="ps-3">{{ $labels['anggota_keluarga_bpjs'] ?? '—' }}</td></tr>
+              <tr><td>Adanya Anggota Keluarga di luar keluarga inti</td><td class="ps-3">{{ $labels['anggota_keluarga_luar'] ?? '—' }}</td></tr>
+              <tr><td>Kependudukan Sesuai Wilayah PBI BPJS</td><td class="ps-3">{{ $labels['kependudukan_wilayah_pbi'] ?? '—' }}</td></tr>
             </tbody>
           </table>
         </div>
