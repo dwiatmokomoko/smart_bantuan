@@ -128,48 +128,39 @@
                                 <table class="table table-sm">
                                     <tbody>
                                         <tr>
-                                            <th class="w-35">Penghasilan</th>
-                                            <td>
-                                                <div>{{ $labels['penghasilan'] ?? '—' }}</div>
-                                                {{-- @if (!is_null($rec->penghasilan_raw))
-                                                <div class="text-muted small">Raw: {{ rtrim(rtrim(number_format((float)$rec->penghasilan_raw, 2, '.', ''), '0'), '.') }}</div>
-                                            @endif --}}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>Pekerjaan</th>
+                                            <th class="w-35">Pekerjaan</th>
                                             <td>
                                                 <div>{{ $labels['pekerjaan'] ?? '—' }}</div>
-                                                {{-- @if (!is_null($rec->pekerjaan_raw))
-                                                <div class="text-muted small">Raw: {{ rtrim(rtrim(number_format((float)$rec->pekerjaan_raw, 2, '.', ''), '0'), '.') }}</div>
-                                            @endif --}}
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th>Status Penempatan</th>
+                                            <th>Status Hubungan Dalam Keluarga</th>
                                             <td>
-                                                <div>{{ $labels['status_penempatan'] ?? '—' }}</div>
-                                                {{-- @if (!is_null($rec->status_penempatan_raw))
-                                                <div class="text-muted small">Raw: {{ rtrim(rtrim(number_format((float)$rec->status_penempatan_raw, 2, '.', ''), '0'), '.') }}</div>
-                                            @endif --}}
+                                                <div>{{ $labels['status_hubungan_keluarga'] ?? '—' }}</div>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th>Calon Penghuni</th>
+                                            <th>Data Kependudukan Sinkron</th>
                                             <td>
-                                                <div>{{ $labels['calon_penghuni'] ?? '—' }}</div>
-                                                {{-- @if (!is_null($rec->calon_penghuni_raw))
-                                                <div class="text-muted small">Raw: {{ rtrim(rtrim(number_format((float)$rec->calon_penghuni_raw, 2, '.', ''), '0'), '.') }}</div>
-                                            @endif --}}
+                                                <div>{{ $labels['data_kependudukan_sinkron'] ?? '—' }}</div>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th>Status Perkawinan</th>
+                                            <th>Adanya Anggota Keluarga Sudah Ditanggung Iuran BPJS</th>
                                             <td>
-                                                <div>{{ $labels['perkawinan'] ?? '—' }}</div>
-                                                {{-- @if (!is_null($rec->perkawinan_raw))
-                                                <div class="text-muted small">Raw: {{ rtrim(rtrim(number_format((float)$rec->perkawinan_raw, 2, '.', ''), '0'), '.') }}</div>
-                                            @endif --}}
+                                                <div>{{ $labels['anggota_keluarga_bpjs'] ?? '—' }}</div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Adanya Anggota Keluarga di luar keluarga inti</th>
+                                            <td>
+                                                <div>{{ $labels['anggota_keluarga_luar'] ?? '—' }}</div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Kependudukan Sesuai Wilayah PBI BPJS</th>
+                                            <td>
+                                                <div>{{ $labels['kependudukan_wilayah_pbi'] ?? '—' }}</div>
                                             </td>
                                         </tr>
 
