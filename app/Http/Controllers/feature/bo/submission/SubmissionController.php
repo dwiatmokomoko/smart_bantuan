@@ -176,12 +176,13 @@ class SubmissionController extends Controller
                 'dt.prob_layak',
                 'dt.created_at as dt_created_at',
 
-                // RAW & label json
-                'dt.penghasilan_raw',
+                // RAW & label json (6 kriteria baru)
                 'dt.pekerjaan_raw',
-                'dt.perkawinan_raw',
-                'dt.calon_penghuni_raw',
-                'dt.status_penempatan_raw',
+                'dt.status_hubungan_keluarga_raw',
+                'dt.data_kependudukan_sinkron_raw',
+                'dt.anggota_keluarga_bpjs_raw',
+                'dt.anggota_keluarga_luar_raw',
+                'dt.kependudukan_wilayah_pbi_raw',
                 'dt.input_label',
             ])
             ->where('ub.id', $id)
@@ -219,13 +220,14 @@ class SubmissionController extends Controller
         if (!empty($rec->input_label)) {
             $parsed = json_decode($rec->input_label, true);
             if (is_array($parsed)) {
-                // Normalisasi key agar konsisten dgn view
+                // Normalisasi key agar konsisten dgn view (6 kriteria baru)
                 $labels = [
-                    'penghasilan' => $parsed['penghasilan'] ?? null,
                     'pekerjaan' => $parsed['pekerjaan'] ?? null,
-                    'perkawinan' => $parsed['perkawinan'] ?? null,
-                    'calon_penghuni' => $parsed['calon_penghuni'] ?? null,
-                    'status_penempatan' => $parsed['status_penempatan'] ?? null,
+                    'status_hubungan_keluarga' => $parsed['status_hubungan_keluarga'] ?? null,
+                    'data_kependudukan_sinkron' => $parsed['data_kependudukan_sinkron'] ?? null,
+                    'anggota_keluarga_bpjs' => $parsed['anggota_keluarga_bpjs'] ?? null,
+                    'anggota_keluarga_luar' => $parsed['anggota_keluarga_luar'] ?? null,
+                    'kependudukan_wilayah_pbi' => $parsed['kependudukan_wilayah_pbi'] ?? null,
                 ];
             }
         }
@@ -248,19 +250,21 @@ class SubmissionController extends Controller
 
         // jika labels masih null atau ada yang kosong, lengkapi dari RAW
         $labels = $labels ?? [];
-        $labels['penghasilan'] = $labels['penghasilan'] ?? $fetchLabel(1, $rec->penghasilan_raw);
-        $labels['pekerjaan'] = $labels['pekerjaan'] ?? $fetchLabel(2, $rec->pekerjaan_raw);
-        $labels['perkawinan'] = $labels['perkawinan'] ?? $fetchLabel(3, $rec->perkawinan_raw);
-        $labels['calon_penghuni'] = $labels['calon_penghuni'] ?? $fetchLabel(4, $rec->calon_penghuni_raw);
-        $labels['status_penempatan'] = $labels['status_penempatan'] ?? $fetchLabel(5, $rec->status_penempatan_raw);
+        $labels['pekerjaan'] = $labels['pekerjaan'] ?? $fetchLabel(1, $rec->pekerjaan_raw);
+        $labels['status_hubungan_keluarga'] = $labels['status_hubungan_keluarga'] ?? $fetchLabel(2, $rec->status_hubungan_keluarga_raw);
+        $labels['data_kependudukan_sinkron'] = $labels['data_kependudukan_sinkron'] ?? $fetchLabel(3, $rec->data_kependudukan_sinkron_raw);
+        $labels['anggota_keluarga_bpjs'] = $labels['anggota_keluarga_bpjs'] ?? $fetchLabel(4, $rec->anggota_keluarga_bpjs_raw);
+        $labels['anggota_keluarga_luar'] = $labels['anggota_keluarga_luar'] ?? $fetchLabel(5, $rec->anggota_keluarga_luar_raw);
+        $labels['kependudukan_wilayah_pbi'] = $labels['kependudukan_wilayah_pbi'] ?? $fetchLabel(6, $rec->kependudukan_wilayah_pbi_raw);
 
         // Apakah ada salah satu RAW yang terisi (untuk menampilkan baris "Raw: xx" di view)
         $hasAnyRaw = (
-            !is_null($rec->penghasilan_raw) ||
             !is_null($rec->pekerjaan_raw) ||
-            !is_null($rec->perkawinan_raw) ||
-            !is_null($rec->calon_penghuni_raw) ||
-            !is_null($rec->status_penempatan_raw)
+            !is_null($rec->status_hubungan_keluarga_raw) ||
+            !is_null($rec->data_kependudukan_sinkron_raw) ||
+            !is_null($rec->anggota_keluarga_bpjs_raw) ||
+            !is_null($rec->anggota_keluarga_luar_raw) ||
+            !is_null($rec->kependudukan_wilayah_pbi_raw)
         );
 
         // Berkas untuk panel kanan (tanpa perubahan)

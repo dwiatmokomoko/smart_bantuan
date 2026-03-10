@@ -15,15 +15,16 @@ class Data_training extends Model
     protected $fillable = [
         // identitas
         'name',
-        
+        'nik',
         'ticket',
 
-        // nilai skor berbobot (hasil normalisasi * bobot)
-        'penghasilan',
+        // nilai skor berbobot (hasil normalisasi * bobot) - 6 kriteria baru
         'pekerjaan',
-        'perkawinan',
-        'calon_penghuni',
-        'status_penempatan',
+        'status_hubungan_keluarga',
+        'data_kependudukan_sinkron',
+        'anggota_keluarga_bpjs',
+        'anggota_keluarga_luar',
+        'kependudukan_wilayah_pbi',
 
         // klasifikasi
         'kelayakan',
@@ -35,34 +36,37 @@ class Data_training extends Model
         'updated_by',
 
         // ======== FIELD BARU (RAW & LABEL) ========
-        'penghasilan_raw',
         'pekerjaan_raw',
-        'perkawinan_raw',
-        'calon_penghuni_raw',
-        'status_penempatan_raw',
+        'status_hubungan_keluarga_raw',
+        'data_kependudukan_sinkron_raw',
+        'anggota_keluarga_bpjs_raw',
+        'anggota_keluarga_luar_raw',
+        'kependudukan_wilayah_pbi_raw',
         'input_label',
     ];
 
     protected $casts = [
-        // skor berbobot empat desimal
-        'penghasilan'        => 'decimal:4',
-        'pekerjaan'          => 'decimal:4',
-        'status_penempatan'  => 'decimal:4',
-        'calon_penghuni'     => 'decimal:4',
-        'perkawinan'         => 'decimal:4',
-        'prob_layak'         => 'decimal:4',
+        // skor berbobot 10 desimal (sesuai SmartService)
+        'pekerjaan'                    => 'decimal:10',
+        'status_hubungan_keluarga'     => 'decimal:10',
+        'data_kependudukan_sinkron'    => 'decimal:10',
+        'anggota_keluarga_bpjs'        => 'decimal:10',
+        'anggota_keluarga_luar'        => 'decimal:10',
+        'kependudukan_wilayah_pbi'     => 'decimal:10',
+        'prob_layak'                   => 'decimal:10',
 
         // flag numerik
         'kelayakan'          => 'integer',
         'status'             => 'integer',
 
         // ======== CAST BARU (RAW & LABEL) ========
-        // RAW boleh 2 desimal (ikuti migrasi)
-        'penghasilan_raw'        => 'decimal:2',
-        'pekerjaan_raw'          => 'decimal:2',
-        'perkawinan_raw'         => 'decimal:2',
-        'calon_penghuni_raw'     => 'decimal:2',
-        'status_penempatan_raw'  => 'decimal:2',
+        // RAW 2 desimal (ikuti migrasi)
+        'pekerjaan_raw'                    => 'decimal:2',
+        'status_hubungan_keluarga_raw'     => 'decimal:2',
+        'data_kependudukan_sinkron_raw'    => 'decimal:2',
+        'anggota_keluarga_bpjs_raw'        => 'decimal:2',
+        'anggota_keluarga_luar_raw'        => 'decimal:2',
+        'kependudukan_wilayah_pbi_raw'     => 'decimal:2',
 
         // otomatis decode JSON -> array saat diakses
         'input_label'        => 'array',
