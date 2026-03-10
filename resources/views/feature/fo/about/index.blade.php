@@ -22,7 +22,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="section-title">
-                        <h3>Tentang Sistem Seleksi Penerima Rusunawa (ROC + SMART)</h3>
+                        <h3>Tentang SmartPBI: Sistem Seleksi Penerima BPJS PBI</h3>
                     </div>
                 </div>
             </div>
@@ -31,54 +31,53 @@
                     <div class="blog__details__text">
                         <div class="blog__details__title">
                             <p>
-                                Ketersediaan hunian layak merupakan kebutuhan dasar. Di Kota Yogyakarta, dinamika urbanisasi
-                                menekan ketersediaan lahan dan hunian, khususnya bagi masyarakat berpenghasilan rendah (MBR).
+                                <strong>BPJS PBI (Penerima Bantuan Iuran)</strong> adalah program jaminan kesehatan gratis dari pemerintah bagi warga miskin dan rentan miskin. Iuran bulanannya dibayar penuh melalui APBN/APBD. Peserta PBI berhak mendapatkan layanan kesehatan kelas 3 di fasilitas kesehatan tingkat pertama hingga rumah sakit rujukan.
                             </p>
                             <p>
-                                Pemerintah menyediakan Rumah Susun Sederhana Sewa (Rusunawa) untuk membantu warga yang belum
-                                memiliki hunian tetap. Agar seleksi calon penghuni lebih objektif dan efisien, kami
-                                mengembangkan sistem pendukung keputusan berbasis <strong>Rank Order Centroid (ROC)</strong> dan
-                                <strong>Simple Multi Attribute Rating Technique (SMART)</strong>.
+                                Pendaftaran BPJS PBI harus terdaftar dalam <strong>Data Terpadu Kesejahteraan Sosial (DTKS)</strong> yang dikelola Kementerian Sosial. Untuk memastikan seleksi penerima yang objektif, akurat, dan transparan, kami mengembangkan sistem pendukung keputusan berbasis <strong>Simple Multi Attribute Rating Technique (SMART)</strong>.
                             </p>
                         </div>
 
                         <div class="blog__details__quote">
                             <p>
-                                “Bobot kriteria ditentukan secara <em>fair</em> dengan ROC, penilaian alternatif dihitung transparan
-                                menggunakan SMART — hasil akhirnya berupa perankingan yang mudah diaudit.”
+                                "Penilaian alternatif dihitung transparan menggunakan SMART — hasil akhirnya berupa perankingan yang mudah diaudit dan adil bagi semua calon penerima."
                             </p>
                         </div>
 
                         <div class="blog__details__title__more">
                             <h4>Latar Belakang</h4>
                             <p>
-                                Tantangan utama seleksi penerima Rusunawa adalah konsistensi penilaian dan keterlacakan
-                                keputusan. Meski <em>regulasi teknis</em> telah mengarahkan indikator kelayakan, proses manual
-                                rentan subjektif dan memakan waktu. Diperlukan pendekatan terstruktur agar keputusan tepat
-                                sasaran, adil, dan dapat dipertanggungjawabkan.
+                                Tantangan utama seleksi penerima BPJS PBI adalah konsistensi penilaian dan keterlacakan keputusan. Meski regulasi teknis telah mengarahkan indikator kelayakan, proses manual rentan subjektif dan memakan waktu. Diperlukan pendekatan terstruktur agar keputusan tepat sasaran, adil, dan dapat dipertanggungjawabkan kepada masyarakat.
                             </p>
                         </div>
 
                         <div class="blog__details__title__more">
                             <h4>Tujuan Sistem</h4>
                             <ul class="pl-5 pb-5 pt-3">
-                                <li>Menyeleksi calon penghuni Rusunawa secara objektif berbasis data.</li>
-                                <li>Mengurangi ketidaktepatan sasaran serta mempercepat proses verifikasi.</li>
+                                <li>Menyeleksi calon penerima BPJS PBI secara objektif berbasis data.</li>
+                                <li>Mengurangi ketidaktepatan sasaran serta mempercepat proses verifikasi kelayakan.</li>
                                 <li>Menyediakan perankingan transparan sebagai rekomendasi bagi pengambil keputusan.</li>
+                                <li>Meningkatkan akuntabilitas dalam penyaluran bantuan kesehatan kepada yang berhak.</li>
                             </ul>
                         </div>
 
                         <div class="blog__details__title__more">
-                            <h4>Metodologi</h4>
+                            <h4>Poin Penting BPJS PBI</h4>
+                            <ul class="pl-5 pb-5 pt-3">
+                                <li><strong>Iuran:</strong> Rp0 (Gratis/ditanggung pemerintah pusat atau daerah).</li>
+                                <li><strong>Sasaran:</strong> Fakir miskin, orang tidak mampu, anak terlantar, lansia, disabilitas, dan penyandang masalah kesejahteraan sosial.</li>
+                                <li><strong>Syarat:</strong> Terdaftar dalam Data Terpadu Kesejahteraan Sosial (DTKS) yang dikelola Kementerian Sosial.</li>
+                                <li><strong>Layanan:</strong> Rawat jalan dan rawat inap kelas 3 di fasilitas kesehatan.</li>
+                                <li><strong>Cek Status:</strong> Bisa melalui WhatsApp PANDAWA (0811-816-5165), aplikasi Mobile JKN, atau situs BPJS Kesehatan.</li>
+                                <li><strong>Pengaktifan Kembali:</strong> Jika dinonaktifkan, bisa diaktifkan kembali melalui Dinas Sosial atau dinas kesehatan setempat jika masih memenuhi syarat, terutama untuk pasien penyakit kronis.</li>
+                                <li><strong>Status Dinamis:</strong> Status PBI dapat berubah/nonaktif jika peserta dianggap sudah mampu secara ekonomi atau tidak terdaftar lagi dalam data DTKS.</li>
+                            </ul>
+                        </div>
+
+                        <div class="blog__details__title__more">
+                            <h4>Metodologi SMART</h4>
                             <p>
-                                <strong>1) Penentuan Bobot dengan ROC.</strong> Pengambil keputusan mengurutkan kriteria dari
-                                paling penting hingga kurang penting. Bobot setiap kriteria dihitung otomatis dengan rumus ROC.
-                                Pendekatan ini sederhana, konsisten, dan cocok saat hanya tersedia urutan prioritas.
-                            </p>
-                            <p>
-                                <strong>2) Penilaian Alternatif dengan SMART.</strong> Setiap kriteria dibentuk fungsi nilai (utility),
-                                dilakukan normalisasi (benefit/cost), lalu dihitung skor akhir sebagai penjumlahan tertimbang:
-                                <em>skor alternatif = Σ (bobot ROC × nilai SMART)</em>. Hasilnya berupa peringkat calon penghuni.
+                                <strong>Penilaian Alternatif dengan SMART.</strong> Setiap kriteria dibentuk fungsi nilai (utility), dilakukan normalisasi (benefit/cost), lalu dihitung skor akhir sebagai penjumlahan tertimbang. Hasilnya berupa peringkat calon penerima BPJS PBI yang objektif dan terukur.
                             </p>
                             <p class="mb-0"><strong>Kriteria yang digunakan:</strong></p>
                             <ul class="pl-5 pt-2">
@@ -95,23 +94,22 @@
                             <h4>Manfaat Sistem</h4>
                             <ul class="pl-5 pb-5 pt-3">
                                 <li>Rekomendasi penerima yang akurat, adil, dan mudah diaudit.</li>
-                                <li>Proses seleksi lebih cepat dan terdokumentasi.</li>
-                                <li>Meningkatkan transparansi dan akuntabilitas penyaluran fasilitas hunian.</li>
+                                <li>Proses seleksi lebih cepat dan terdokumentasi dengan baik.</li>
+                                <li>Meningkatkan transparansi dan akuntabilitas penyaluran bantuan kesehatan BPJS PBI.</li>
+                                <li>Memastikan bantuan tepat sasaran kepada yang paling membutuhkan.</li>
                             </ul>
                         </div>
 
                         <div class="blog__details__item">
                             <div class="blog__details__item__pic">
-                                <img src="{{ asset('fo/img/rusun.jpeg') }}" alt="Ilustrasi Rusunawa">
+                                <img src="{{ asset('fo/img/rusun.jpeg') }}" alt="Ilustrasi BPJS PBI">
                             </div>
                         </div>
 
                         <div class="blog__details__item">
                             <div class="blog__details__item__text">
                                 <p>
-                                    Dengan pendekatan ROC + SMART, proses seleksi calon penghuni Rusunawa menjadi lebih
-                                    terstruktur, terukur, dan berkeadilan—mendukung misi menyediakan hunian layak bagi
-                                    masyarakat yang benar-benar membutuhkan.
+                                    Dengan pendekatan SMART, proses seleksi calon penerima BPJS PBI menjadi lebih terstruktur, terukur, dan berkeadilan—mendukung misi menyediakan jaminan kesehatan bagi masyarakat yang benar-benar membutuhkan.
                                 </p>
                             </div>
                         </div>
@@ -119,16 +117,15 @@
                         <div class="blog__details__desc pt-5">
                             <h4>Penutup</h4>
                             <p>
-                                Kami berharap sistem ini menjadi referensi yang kuat dalam pengambilan keputusan penerima
-                                Rusunawa. Saran dan masukan sangat kami nantikan demi penyempurnaan berkelanjutan.
+                                Kami berharap sistem SmartPBI ini menjadi referensi yang kuat dalam pengambilan keputusan penerima BPJS PBI. Saran dan masukan sangat kami nantikan demi penyempurnaan berkelanjutan.
                             </p>
                             <p>
                                 Untuk pertanyaan lebih lanjut atau kolaborasi, silakan kunjungi halaman
                                 <a href="{{ route('fo.ourteam.index') }}">kontak</a> kami.
                             </p>
                             <p>
-                                Detail informasi Rusunawa bisa diklik
-                                <a href="https://drive.google.com/file/d/1jJ3dnEG75FBmIhcRr_a3wF0h_Dw7Tym0/view?usp=sharing">di sini.</a>
+                                Informasi lebih lanjut tentang BPJS PBI dapat diakses melalui situs resmi
+                                <a href="https://www.bpjs-kesehatan.go.id/" target="_blank">BPJS Kesehatan</a>.
                             </p>
 
                         </div>

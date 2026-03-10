@@ -79,7 +79,7 @@
   <div class="container ug-wrap">
 
     <div class="ug-head">
-      <h2 class="ug-title">Petunjuk Penggunaan Sistem Klasifikasi Penerima Rusunawa</h2>
+      <h2 class="ug-title">Petunjuk Penggunaan SmartPBI BPJS PBI</h2>
       <div class="ug-divide"></div>
       <div class="ug-sub">
         Alur singkat:
@@ -128,7 +128,7 @@
       <div class="ug-card">
         <div class="ug-step">
           <div class="ug-badge">3</div>
-          <h4 class="ug-h4">Mengisi Formulir Kelayakan</h4>
+          <h4 class="ug-h4">Mengisi Formulir Kelayakan BPJS PBI</h4>
         </div>
         <div class="ug-lines">
           <div class="ug-line">Masuk ke <strong>Pengajuan → Hitung Kelayakan</strong>.</div>

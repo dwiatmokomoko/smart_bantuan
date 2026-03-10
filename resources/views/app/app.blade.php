@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>SiRuSmart</title>
+    <title>SmartPBI: BPJS PBI</title>
     <link rel="shortcut icon" type="image/png" href="{{ asset('images/logos/favicon.png') }}" />
     <link rel="stylesheet" href="{{ asset('bo/css/styles.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('bo/css/custom.css') }}" />

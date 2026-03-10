@@ -1,0 +1,387 @@
+/* ===== SmartPBI BPJS Front Office Theme - Hero Section & Navbar ===== */
+
+:root {
+    --bpjs-primary: #0052A3;
+    --bpjs-secondary: #00A651;
+    --bpjs-accent: #0066CC;
+    --bpjs-light: #E8F4F8;
+    --bpjs-dark: #003D7A;
+}
+
+/* ===== Navbar with Blue Gradient ===== */
+.header-section {
+    background: linear-gradient(90deg, #0052A3 0%, #0066CC 100%) !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 999 !important;
+    transition: all 0.3s ease !important;
+}
+
+.header-section.header-normal {
+    background: linear-gradient(90deg, #0052A3 0%, #0066CC 100%) !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 999 !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Navbar scrolled - berubah warna putih */
+.header-section.scrolled {
+    background: #ffffff !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+}
+
+.header-section.scrolled .header__menu ul li a {
+    color: #0052A3 !important;
+}
+
+.header-section.scrolled .header__menu ul li a:hover {
+    color: #0066CC !important;
+}
+
+.header-section.scrolled .header__menu ul li.active a {
+    color: #0066CC !important;
+}
+
+.header-section.scrolled .header__logo {
+    opacity: 0.9;
+}
+
+.header-section.scrolled .canvas__open span {
+    color: #0052A3 !important;
+}
+
+/* ===== Hero Section ===== */
+.hero-section {
+    position: relative;
+    overflow: hidden;
+}
+
+.hero__item {
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+/* Gradient overlay setengah transparan di kiri */
+.hero__item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(0, 82, 163, 0.85) 0%, rgba(0, 82, 163, 0.6) 40%, transparent 100%);
+    z-index: 1;
+}
+
+.hero__text {
+    color: #fff;
+    position: relative;
+    z-index: 2;
+}
+
+.hero__text h5 {
+    color: var(--bpjs-secondary);
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.hero__text h2 {
+    color: #fff;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 1.5rem;
+}
+
+.hero__text p {
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+/* ===== Buttons ===== */
+.primary-btn {
+    background-color: var(--bpjs-secondary) !important;
+    color: white !important;
+    padding: 12px 30px !important;
+    border-radius: 4px !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+    display: inline-block !important;
+    text-decoration: none !important;
+    border: none !important;
+    cursor: pointer !important;
+}
+
+.primary-btn:hover {
+    background-color: #008040 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(0, 166, 81, 0.3) !important;
+    color: white !important;
+    text-decoration: none !important;
+}
+
+.primary-btn:focus {
+    background-color: #008040 !important;
+    color: white !important;
+    text-decoration: none !important;
+}
+
+/* ===== Section Titles ===== */
+.section-title h3 {
+    color: var(--bpjs-primary) !important;
+    font-weight: 700 !important;
+}
+
+/* ===== About Section ===== */
+.about-us {
+    background-color: #f8f9fa;
+}
+
+.about__text p {
+    color: #555;
+    line-height: 1.8;
+}
+
+.about__text strong {
+    color: var(--bpjs-primary);
+    font-weight: 600;
+}
+
+/* ===== Links ===== */
+a {
+    color: var(--bpjs-accent);
+    transition: all 0.3s ease;
+}
+
+a:hover {
+    color: var(--bpjs-primary);
+    text-decoration: underline;
+}
+
+/* ===== Badges ===== */
+.badge-criteria {
+    display: inline-block;
+    padding: 0.4rem 0.75rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    margin: 0.25rem;
+    font-size: 0.9rem;
+    backdrop-filter: blur(2px);
+    color: white;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+    .hero__item {
+        height: 70vh;
+    }
+
+    .hero__item::before {
+        width: 100%;
+        background: linear-gradient(180deg, rgba(0, 82, 163, 0.85) 0%, rgba(0, 82, 163, 0.6) 50%, transparent 100%);
+    }
+
+    .hero__text h2 {
+        font-size: 24px;
+    }
+
+    .hero__text p {
+        font-size: 0.95rem;
+    }
+
+    .primary-btn {
+        padding: 10px 20px !important;
+        font-size: 0.9rem !important;
+    }
+}
+
+/* ===== Offcanvas Menu ===== */
+.offcanvas__menu__overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.offcanvas__menu__wrapper {
+    background-color: var(--bpjs-primary) !important;
+}
+
+.offcanvas__menu {
+    background-color: var(--bpjs-primary) !important;
+}
+
+.offcanvas__menu ul li a {
+    color: #fff !important;
+    transition: all 0.3s ease !important;
+}
+
+.offcanvas__menu ul li a:hover {
+    color: var(--bpjs-secondary) !important;
+}
+
+.offcanvas__menu ul li.active a {
+    color: var(--bpjs-secondary) !important;
+}
+
+.offcanvas__close {
+    color: white;
+}
+
+.offcanvas__logo {
+    background-color: var(--bpjs-primary);
+}
+
+/* ===== Footer ===== */
+.footer {
+    background-color: var(--bpjs-dark);
+}
+
+.footer__text {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.footer__text a {
+    color: var(--bpjs-secondary);
+}
+
+.footer__text a:hover {
+    color: white;
+}
+
+/* ===== Breadcrumb ===== */
+.breadcrumb {
+    background-color: var(--bpjs-light);
+}
+
+.breadcrumb-item.active {
+    color: var(--bpjs-primary);
+    font-weight: 600;
+}
+
+.breadcrumb-item a {
+    color: var(--bpjs-accent);
+}
+
+.breadcrumb-item a:hover {
+    color: var(--bpjs-primary);
+}
+
+/* ===== Form Elements ===== */
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--bpjs-accent) !important;
+    box-shadow: 0 0 0 0.2rem rgba(0, 102, 204, 0.25) !important;
+}
+
+.form-control,
+.form-select {
+    border-color: #D0D8E8 !important;
+}
+
+/* ===== Tables ===== */
+.table thead th {
+    background-color: var(--bpjs-primary) !important;
+    color: white !important;
+    font-weight: 600 !important;
+}
+
+.table tbody tr:hover {
+    background-color: var(--bpjs-light) !important;
+}
+
+/* ===== Cards ===== */
+.card {
+    border: 1px solid #E0E7FF !important;
+    box-shadow: 0 2px 8px rgba(0, 82, 163, 0.08) !important;
+}
+
+.card-header {
+    background: linear-gradient(135deg, var(--bpjs-primary) 0%, var(--bpjs-accent) 100%) !important;
+    color: white !important;
+    font-weight: 600 !important;
+}
+
+/* ===== Alerts ===== */
+.alert-success {
+    background-color: #E8F8F0 !important;
+    border-color: var(--bpjs-secondary) !important;
+    color: #003D2E !important;
+}
+
+.alert-info {
+    background-color: var(--bpjs-light) !important;
+    border-color: var(--bpjs-accent) !important;
+    color: var(--bpjs-dark) !important;
+}
+
+/* ===== Pagination ===== */
+.pagination .page-link {
+    color: var(--bpjs-primary) !important;
+    border-color: #D0D8E8 !important;
+}
+
+.pagination .page-link:hover {
+    background-color: var(--bpjs-light) !important;
+    border-color: var(--bpjs-accent) !important;
+    color: var(--bpjs-primary) !important;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: var(--bpjs-primary) !important;
+    border-color: var(--bpjs-primary) !important;
+}
+
+/* ===== Spinner ===== */
+.spinner-border {
+    color: var(--bpjs-primary) !important;
+}
+
+/* ===== Progress Bar ===== */
+.progress {
+    background-color: #E0E7FF !important;
+}
+
+.progress-bar {
+    background: linear-gradient(90deg, var(--bpjs-primary) 0%, var(--bpjs-secondary) 100%) !important;
+}
+
+/* ===== Modal ===== */
+.modal-header {
+    background: linear-gradient(135deg, var(--bpjs-primary) 0%, var(--bpjs-accent) 100%) !important;
+    color: white !important;
+    border: none !important;
+}
+
+.modal-header .btn-close {
+    filter: brightness(0) invert(1) !important;
+}
+
+/* ===== Utility Classes ===== */
+.text-primary {
+    color: var(--bpjs-primary) !important;
+}
+
+.text-secondary {
+    color: var(--bpjs-secondary) !important;
+}
+
+.bg-primary {
+    background-color: var(--bpjs-primary) !important;
+}
+
+.bg-secondary {
+    background-color: var(--bpjs-secondary) !important;
+}
+
+.border-primary {
+    border-color: var(--bpjs-primary) !important;
+}
+
+.border-secondary {
+    border-color: var(--bpjs-secondary) !important;
+}

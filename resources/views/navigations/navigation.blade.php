@@ -2,8 +2,8 @@
     <a href="{{ route('admin.home') }}" class="text-nowrap logo-img">
         <img src="{{ asset('fo/img/silayak-logo2.png') }}"
              alt="Logo"
-             class="rounded-circle d-block mx-auto mt-2"  {{-- mt-2 = agak turun --}}
-             style="height:80px;width:80px;object-fit:cover;">
+             class="d-block mx-auto mt-2"  {{-- mt-2 = agak turun --}}
+             style="height:80px;width:150px;">
     </a>
 
     {{-- tombol close diposisikan absolute agar logo tetap center --}}

@@ -6,7 +6,7 @@
 
                 <div class="col-lg-12 col-md-12 col-sm-12">
                     <div class="footer__text-widget">
-                        <p class="text-center text-white">All right reserved with &copy; <a href="{{route('fo.home.index')}}"><b>SIRuSmart</b></a> {{now()->year}}</p>
+                        <p class="text-center text-white">All right reserved with &copy; <a href="{{route('fo.home.index')}}"><b>SmartPBI</b></a> {{now()->year}}</p>
                         {{-- <h5>cONTACT US</h5> --}}
                     </div>
                 </div>

@@ -8,9 +8,9 @@
                 <h5 class="card-title fw-semibold mb-4">Selamat Datang</h5>
 
                 {{-- Menampilkan logo --}}
-                <img src="{{ asset('fo/img/silayak-logo2.png') }}" class="rounded-circle" alt="Logo Silayak" style="max-width: 200px; height: auto;">
+                <img src="{{ asset('fo/img/silayak-logo2.png') }}" class="rounded-circle" alt="Logo Silayak" style="max-width: 700px; height: auto;">
 
-                <p class="mt-3 mb-0">Sistem Penilaian Kelayakan Rusunawa</p>
+                <p class="mt-3 mb-0">Sistem Penilaian Kelayakan PBI BPJS</p>
             </div>
         </div>
     </div>

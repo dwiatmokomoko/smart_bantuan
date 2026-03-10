@@ -1,39 +1,5 @@
 @extends('app.app_fo')
 
-@push('styles')
-    <style>
-        .hero-section {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero__item {
-            height: 100vh;
-            /* 100% tinggi layar */
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            display: flex;
-            align-items: center;
-        }
-
-        .hero__text {
-            color: #fff;
-        }
-
-        .badge-criteria {
-            display: inline-block;
-            padding: .4rem .75rem;
-            border-radius: 999px;
-            background: rgba(255, 255, 255, .15);
-            border: 1px solid rgba(255, 255, 255, .3);
-            margin: .25rem;
-            font-size: .9rem;
-            backdrop-filter: blur(2px);
-        }
-    </style>
-@endpush
-
 @section('content_fo')
     <!-- Hero Section Begin -->
     <section class="hero-section">
@@ -45,12 +11,10 @@
                     <div class="row">
                         <div class="col-lg-7">
                             <div class="hero__text">
-                                <h5>Bersama Wujudkan Hunian Layak untuk Semua</h5>
-                                <h2>Seleksi Penerima Rusunawa Lebih Objektif dengan ROC & SMART</h2>
+                                <h5>Sistem Pendukung Keputusan BPJS PBI</h5>
+                                <h2>SmartPBI: Seleksi Penerima Bantuan Iuran Lebih Objektif</h2>
                                 <p class="mt-3 mb-4">
-                                    Bobot kriteria ditentukan dengan <strong>Rank Order Centroid (ROC)</strong>, penilaian
-                                    alternatif memakai
-                                    <strong>SMART</strong> agar rekomendasi lebih transparan dan tepat sasaran.
+                                    Sistem cerdas untuk menentukan kelayakan penerima BPJS PBI dengan metode SMART yang transparan dan akurat. Membantu pemerintah memberikan bantuan kesehatan kepada yang paling membutuhkan.
                                 </p>
 
                                     <div>
@@ -109,30 +73,12 @@
                         </div>
                         <div class="about__content text-center">
                             <p>
-                                Aplikasi ini membantu Pemerintah Kota Yogyakarta menyeleksi calon penerima
-                                <em>Rumah Susun Sederhana Sewa (Rusunawa)</em> secara objektif, akurat, dan efisien.
-                                <strong>ROC</strong> digunakan untuk menentukan bobot kriteria berdasarkan urutan prioritas,
-                                sedangkan <strong>SMART</strong> dipakai untuk menghitung nilai akhir setiap alternatif.
+                                <strong>SmartPBI</strong> adalah sistem pendukung keputusan yang membantu pemerintah menyeleksi calon penerima 
+                                <em>BPJS PBI (Penerima Bantuan Iuran)</em> secara objektif, akurat, dan efisien.
+                                Menggunakan metode <strong>SMART (Simple Multi-Attribute Rating Technique)</strong> untuk menghitung nilai akhir setiap alternatif berdasarkan kriteria yang telah ditentukan.
                                 Kriteria yang dinilai meliputi:
                                 <strong>Pekerjaan, Status Hubungan Dalam Keluarga, Data Kependudukan Sinkron, Adanya Anggota Keluarga Sudah Ditanggung Iuran BPJS, Adanya Anggota Keluarga di luar keluarga inti,</strong> dan <strong>Kependudukan Sesuai Wilayah PBI BPJS</strong>.
                             </p>
-
-                            {{-- <div class="row mt-4 text-start">
-                                <div class="col-md-6">
-                                    <ul>
-                                        <li>Input data kriteria & alternatif</li>
-                                        <li>Penentuan bobot otomatis (ROC)</li>
-                                        <li>Normalisasi & skoring (SMART)</li>
-                                    </ul>
-                                </div>
-                                <div class="col-md-6">
-                                    <ul>
-                                        <li>Hasil perankingan yang transparan</li>
-                                        <li>Rekomendasi untuk pengambil keputusan</li>
-                                        <li>Ekspor & dokumentasi hasil</li>
-                                    </ul>
-                                </div>
-                            </div> --}}
 
                             <div class="mt-5">
                                 <a href="{{ route('fo.about.index') }}" class="primary-btn">Pelajari Metode</a>

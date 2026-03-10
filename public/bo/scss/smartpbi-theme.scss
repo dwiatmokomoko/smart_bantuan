@@ -1,0 +1,393 @@
+// ===== SmartPBI BPJS Theme SCSS =====
+// Warna-warna mengikuti identitas visual logo BPJS
+
+// ===== Color Variables =====
+$bpjs-primary: #0052A3;
+$bpjs-secondary: #00A651;
+$bpjs-accent: #0066CC;
+$bpjs-light: #E8F4F8;
+$bpjs-dark: #003D7A;
+$bpjs-light-bg: #f0f7ff;
+$bpjs-light-bg-green: #f0fff4;
+
+$gray-100: #f8f9fa;
+$gray-200: #e9ecef;
+$gray-300: #dee2e6;
+$gray-400: #ced4da;
+$gray-500: #adb5bd;
+$gray-600: #6c757d;
+$gray-700: #495057;
+$gray-800: #343a40;
+$gray-900: #212529;
+
+$success: $bpjs-secondary;
+$danger: #DC3545;
+$warning: #FFC107;
+$info: $bpjs-accent;
+
+// ===== Mixins =====
+@mixin gradient-primary {
+    background: linear-gradient(135deg, $bpjs-primary 0%, $bpjs-accent 100%);
+}
+
+@mixin gradient-primary-to-secondary {
+    background: linear-gradient(135deg, $bpjs-primary 0%, $bpjs-secondary 100%);
+}
+
+@mixin gradient-topbar {
+    background: linear-gradient(90deg, $bpjs-primary 0%, $bpjs-accent 100%);
+}
+
+@mixin gradient-sidebar {
+    background: linear-gradient(180deg, $bpjs-primary 0%, $bpjs-dark 100%);
+}
+
+@mixin box-shadow-primary {
+    box-shadow: 0 2px 8px rgba($bpjs-primary, 0.08);
+}
+
+@mixin focus-state {
+    border-color: $bpjs-accent !important;
+    box-shadow: 0 0 0 0.2rem rgba($bpjs-accent, 0.25) !important;
+}
+
+@mixin button-hover {
+    transition: all 0.3s ease;
+    
+    &:hover {
+        transform: translateY(-2px);
+        @include box-shadow-primary;
+    }
+}
+
+// ===== Base Styles =====
+body {
+    background: linear-gradient(135deg, $bpjs-light-bg 0%, $bpjs-light-bg-green 100%) !important;
+}
+
+// ===== Buttons =====
+.btn-primary {
+    background-color: $bpjs-primary !important;
+    border-color: $bpjs-primary !important;
+    color: white !important;
+    @include button-hover;
+
+    &:hover {
+        background-color: $bpjs-dark !important;
+        border-color: $bpjs-dark !important;
+    }
+
+    &:focus,
+    &.focus {
+        background-color: $bpjs-dark !important;
+        border-color: $bpjs-dark !important;
+        box-shadow: 0 0 0 0.2rem rgba($bpjs-primary, 0.5) !important;
+    }
+}
+
+.btn-success {
+    background-color: $bpjs-secondary !important;
+    border-color: $bpjs-secondary !important;
+    color: white !important;
+    @include button-hover;
+
+    &:hover {
+        background-color: #008040 !important;
+        border-color: #008040 !important;
+    }
+}
+
+// ===== Badges =====
+.badge-primary {
+    background-color: $bpjs-primary !important;
+    color: white !important;
+}
+
+.badge-success {
+    background-color: $bpjs-secondary !important;
+    color: white !important;
+}
+
+.badge-layak {
+    background-color: $bpjs-secondary !important;
+    color: white !important;
+    padding: 0.5rem 0.75rem !important;
+    border-radius: 4px !important;
+    font-weight: 600 !important;
+}
+
+.badge-tidak-layak {
+    background-color: $danger !important;
+    color: white !important;
+    padding: 0.5rem 0.75rem !important;
+    border-radius: 4px !important;
+    font-weight: 600 !important;
+}
+
+.badge-diupayakan {
+    background-color: $warning !important;
+    color: #333 !important;
+    padding: 0.5rem 0.75rem !important;
+    border-radius: 4px !important;
+    font-weight: 600 !important;
+}
+
+// ===== Alerts =====
+.alert-info {
+    background-color: $bpjs-light !important;
+    border-color: $bpjs-accent !important;
+    color: $bpjs-dark !important;
+}
+
+.alert-success {
+    background-color: #E8F8F0 !important;
+    border-color: $bpjs-secondary !important;
+    color: #003D2E !important;
+}
+
+// ===== Cards =====
+.card {
+    border: 1px solid #E0E7FF !important;
+    @include box-shadow-primary;
+    border-radius: 8px !important;
+
+    &-header {
+        @include gradient-primary;
+        color: white !important;
+        border-bottom: none !important;
+        font-weight: 600 !important;
+    }
+}
+
+// ===== Form Controls =====
+.form-control,
+.form-select {
+    border-color: #D0D8E8 !important;
+
+    &:focus {
+        @include focus-state;
+    }
+}
+
+// ===== Navigation =====
+.left-sidebar {
+    @include gradient-sidebar;
+}
+
+.nav-link {
+    color: rgba(255, 255, 255, 0.8) !important;
+    transition: all 0.3s ease !important;
+
+    &:hover,
+    &.active {
+        color: white !important;
+        background-color: rgba(255, 255, 255, 0.1) !important;
+        border-left: 4px solid $bpjs-secondary !important;
+        padding-left: calc(1rem - 4px) !important;
+    }
+}
+
+// ===== Topbar =====
+.topbar {
+    @include gradient-topbar;
+    box-shadow: 0 2px 8px rgba($bpjs-primary, 0.15) !important;
+}
+
+// ===== Tables =====
+.table {
+    thead th {
+        background-color: $bpjs-primary !important;
+        color: white !important;
+        font-weight: 600 !important;
+        border: none !important;
+    }
+
+    tbody tr:hover {
+        background-color: $bpjs-light !important;
+    }
+
+    &-striped tbody tr:nth-of-type(odd) {
+        background-color: rgba($bpjs-primary, 0.02) !important;
+    }
+}
+
+// ===== Progress Bar =====
+.progress {
+    background-color: #E0E7FF !important;
+    height: 8px !important;
+    border-radius: 4px !important;
+
+    &-bar {
+        background: linear-gradient(90deg, $bpjs-primary 0%, $bpjs-secondary 100%) !important;
+    }
+}
+
+// ===== Headings =====
+h1, h2, h3, h4, h5, h6 {
+    color: $bpjs-primary !important;
+}
+
+.page-title {
+    color: $bpjs-primary !important;
+    font-weight: 700 !important;
+    margin-bottom: 1.5rem !important;
+}
+
+// ===== Links =====
+a {
+    color: $bpjs-accent !important;
+    text-decoration: none !important;
+
+    &:hover {
+        color: $bpjs-primary !important;
+        text-decoration: underline !important;
+    }
+}
+
+// ===== Select2 =====
+.select2-container--default {
+    .select2-selection--single .select2-selection__rendered {
+        color: #5A6A85 !important;
+        padding: 8px 16px !important;
+    }
+
+    &.select2-container--focus .select2-selection--single {
+        @include focus-state;
+    }
+
+    .select2-selection--multiple .select2-selection__choice {
+        background-color: $bpjs-light !important;
+        border: 1px solid $bpjs-accent !important;
+        color: $bpjs-primary !important;
+    }
+}
+
+// ===== Modal =====
+.modal-header {
+    @include gradient-primary;
+    color: white !important;
+    border: none !important;
+
+    .btn-close {
+        filter: brightness(0) invert(1) !important;
+    }
+}
+
+// ===== Pagination =====
+.pagination {
+    .page-link {
+        color: $bpjs-primary !important;
+        border-color: #D0D8E8 !important;
+
+        &:hover {
+            background-color: $bpjs-light !important;
+            border-color: $bpjs-accent !important;
+            color: $bpjs-primary !important;
+        }
+    }
+
+    .page-item.active .page-link {
+        background-color: $bpjs-primary !important;
+        border-color: $bpjs-primary !important;
+    }
+}
+
+// ===== Breadcrumb =====
+.breadcrumb {
+    background-color: transparent !important;
+
+    .breadcrumb-item.active {
+        color: $bpjs-primary !important;
+        font-weight: 600 !important;
+    }
+
+    .breadcrumb-item a {
+        color: $bpjs-accent !important;
+    }
+}
+
+// ===== Spinner =====
+.spinner-border {
+    color: $bpjs-primary !important;
+}
+
+// ===== Toastr =====
+.toast-success {
+    background-color: $bpjs-secondary !important;
+}
+
+.toast-info {
+    background-color: $bpjs-accent !important;
+}
+
+.toast-error {
+    background-color: $danger !important;
+}
+
+// ===== SmartPBI Specific =====
+.smartpbi-header {
+    @include gradient-primary-to-secondary;
+    color: white !important;
+    padding: 2rem !important;
+    border-radius: 8px !important;
+    margin-bottom: 2rem !important;
+
+    h1 {
+        color: white !important;
+        margin-bottom: 0.5rem !important;
+    }
+
+    p {
+        color: rgba(255, 255, 255, 0.9) !important;
+        margin: 0 !important;
+    }
+}
+
+.smartpbi-result-card {
+    border-left: 4px solid $bpjs-secondary !important;
+    background: linear-gradient(135deg, rgba($bpjs-primary, 0.02) 0%, rgba($bpjs-secondary, 0.02) 100%) !important;
+
+    &.layak {
+        border-left-color: $bpjs-secondary !important;
+    }
+
+    &.tidak-layak {
+        border-left-color: $danger !important;
+    }
+
+    &.diupayakan {
+        border-left-color: $warning !important;
+    }
+}
+
+// ===== Stat Box =====
+.stat-box {
+    background: white !important;
+    border: 1px solid #E0E7FF !important;
+    border-radius: 8px !important;
+    padding: 1.5rem !important;
+    @include box-shadow-primary;
+
+    .stat-value {
+        color: $bpjs-primary !important;
+        font-size: 2rem !important;
+        font-weight: 700 !important;
+    }
+
+    .stat-label {
+        color: #6B7280 !important;
+        font-size: 0.875rem !important;
+        margin-top: 0.5rem !important;
+    }
+}
+
+// ===== Responsive =====
+@media (max-width: 768px) {
+    .smartpbi-header {
+        padding: 1.5rem !important;
+    }
+
+    .nav-link.active {
+        border-left: 4px solid $bpjs-secondary !important;
+    }
+}

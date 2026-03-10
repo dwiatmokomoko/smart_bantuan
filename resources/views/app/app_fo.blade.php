@@ -8,7 +8,7 @@
     <meta name="keywords" content="Deerhost, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>SiRuSmart</title>
+    <title>SmartPBI: BPJS PBI</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700,800,900&display=swap"
@@ -22,38 +22,7 @@
     <link rel="stylesheet" href="{{ asset('fo/css/owl.carousel.min.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ asset('fo/css/slicknav.min.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ asset('fo/css/style.css') }}" type="text/css">
-    <style>
-        .hero-section {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero__item {
-            height: 100vh;
-            /* 100% tinggi layar */
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            display: flex;
-            align-items: center;
-        }
-
-        .hero__text {
-            color: #fff;
-        }
-
-        .navbar .nav-link {
-            color: #fff !important;
-            /* putih */
-            font: inherit;
-            /* font sama seperti LOGIN */
-            text-decoration: none;
-        }
-
-        .navbar .nav-link:hover {
-            opacity: .8;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('fo/css/smartpbi-theme-fo.css') }}" type="text/css">
     @stack('style')
 </head>
 
@@ -87,6 +56,21 @@
     <script src="{{ asset('bo/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
 
     @stack('script')
+
+    <!-- Sticky Navbar Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const headerSection = document.querySelector('.header-section');
+            
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 100) {
+                    headerSection.classList.add('scrolled');
+                } else {
+                    headerSection.classList.remove('scrolled');
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
