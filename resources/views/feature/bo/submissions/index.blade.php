@@ -10,7 +10,7 @@
 <div class="container-fluid">
   <div class="card mt-4">
     <div class="card-body">
-      <h5 class="card-title fw-semibold mb-4">Daftar Pengajuan Rusunawa</h5>
+      <h5 class="card-title fw-semibold mb-4">Daftar Pengajuan BPJS PBI</h5>
 
       {{-- Filter --}}
       <div class="row g-2 mb-3">

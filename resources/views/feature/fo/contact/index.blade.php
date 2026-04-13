@@ -107,7 +107,7 @@
         </div>
         <div class="ug-lines">
           <div class="ug-line">Buka menu <strong>Register</strong> atau langsung halaman <strong>Login</strong>.</div>
-          <div class="ug-line">Jawab 4 pertanyaan: Warga Kota Yogyakarta? PNS/TNI/Polri? Memiliki rumah? Sudah/pernah menikah?</div>
+          <div class="ug-line">Jawab 2 pertanyaan: Warga Kota Yogyakarta? PNS/TNI/Polri?</div>
           <div class="ug-line ug-hint">Jika pola jawaban terpenuhi → diarahkan ke <strong>Registrasi</strong>.</div>
         </div>
       </div>

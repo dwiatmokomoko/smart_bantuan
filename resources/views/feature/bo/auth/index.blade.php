@@ -10,7 +10,7 @@
                             <div class="text-nowrap logo-img text-center d-block py-3 w-100">
                                 <img src="{{asset("fo/img/silayak-logo2.png")}}" width="180" alt="" class="rounded-circle">
                             </div>
-                            <p class="text-center">SISTEM INFORMASI MANAJEMEN</br>KELAYAKAN RUSUNAWA</p>
+                            <p class="text-center">SISTEM INFORMASI MANAJEMEN</br>KELAYAKAN BPJS PBI</p>
                             <form method="POST" action="{{ route("admin.auth") }}">
                                 @csrf
                                 <div class="mb-3">
