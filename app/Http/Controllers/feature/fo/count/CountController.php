@@ -26,16 +26,12 @@ class CountController extends Controller
         $request->validate([
             'is_warga_yogya'   => 'required|in:ya,tidak',
             'is_pns_tni_polri' => 'required|in:ya,tidak',
-            'memiliki_rumah'   => 'required|in:ya,tidak',
-            'is_menikah'       => 'required|in:ya,tidak',
         ]);
 
         if ($request->is_warga_yogya === 'tidak'
-            && $request->is_pns_tni_polri === 'ya'
-            && $request->memiliki_rumah === 'ya'
-            && $request->is_menikah === 'tidak') {
+            && $request->is_pns_tni_polri === 'ya') {
             return back()->withInput()->with('error_filter',
-                'Mohon maaf, Anda tidak termasuk dalam kriteria penerima program RUSUNAWA');
+                'Mohon maaf, Anda tidak termasuk dalam kriteria penerima program BPJS PBI');
         }
 
         session(['lolos_filter' => true]);

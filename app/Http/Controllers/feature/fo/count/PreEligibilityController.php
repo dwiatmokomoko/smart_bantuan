@@ -12,20 +12,16 @@ class PreEligibilityController extends Controller
         $data = $request->validate([
             'is_warga_kota' => ['required', 'in:ya,tidak'],
             'is_aparat' => ['required', 'in:ya,tidak'],
-            'is_punya_rumah' => ['required', 'in:ya,tidak'],
-            'is_menikah' => ['required', 'in:ya,tidak'],
         ]);
 
         $lolos = $data['is_warga_kota'] === 'ya'
-            && $data['is_aparat'] === 'tidak'
-            && $data['is_punya_rumah'] === 'tidak'
-            && $data['is_menikah'] === 'ya';
+            && $data['is_aparat'] === 'tidak';
 
         if (!$lolos) {
             return redirect()
                 ->route('pre-eligibility.form')
                 ->withInput()
-                ->with('error', 'Mohon maaf, Anda tidak termasuk dalam kriteria penerima program RUSUNAWA');
+                ->with('error', 'Mohon maaf, Anda tidak termasuk dalam kriteria penerima program BPJS PBI');
         }
 
         // Set flag pra-kelayakan & simpan jawaban (opsional)

@@ -21,7 +21,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <h3>Pra-Kelayakan Program RUSUNAWA</h3>
+                    <h3>Pra-Kelayakan Program BPJS PBI</h3>
                     <p class="mb-4">Silakan isi pertanyaan berikut untuk mengetahui apakah Anda memenuhi syarat awal.</p>
 
                     @if (session('error'))
@@ -45,22 +45,6 @@
                                 <div class="mb-3">
                                     <label>Apakah pekerjaan Anda PNS/TNI/Polri?</label>
                                     <select name="is_aparat" class="form-control" required>
-                                        <option value="">-- Pilih --</option>
-                                        <option value="ya">Ya</option>
-                                        <option value="tidak">Tidak</option>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label>Apakah Anda memiliki rumah?</label>
-                                    <select name="is_punya_rumah" class="form-control" required>
-                                        <option value="">-- Pilih --</option>
-                                        <option value="ya">Ya</option>
-                                        <option value="tidak">Tidak</option>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label>Apakah Anda sudah atau pernah menikah?</label>
-                                    <select name="is_menikah" class="form-control" required>
                                         <option value="">-- Pilih --</option>
                                         <option value="ya">Ya</option>
                                         <option value="tidak">Tidak</option>
